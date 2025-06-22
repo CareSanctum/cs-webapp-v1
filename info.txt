@@ -1,0 +1,33 @@
+I am trying to build a Emergency Dashboard, which is going to be used by security guards in a society. Each emergency is a ticket in our system, and we have APIs in place to fetch and get things.
+What I require to build is a webapp that is mobile responsive and also for web. I am going to create a react-native mobile app and render this webapp in webview.
+
+I asked someone to reate a design for few things - but I am not happy with the design and responsiveness do not work.
+I need your expertiese to sort this.
+I want to create few good responsive, uniform-looking webpages in my project for the following things:
+- headers and navbar should be uniform in the whole app.
+    - there is a chonky implementation for collapsing navbar, if too much trouble I don't mind removing it
+    - Navbar should be uniform in all the screens.
+    - on mobile it should always be collapsed and there should be a hamburger menu on right side to open/close it
+
+- Login Screen
+- Dashboard (main landing page where all the tickets will be seen)
+    - Dashboard should have a summary component like it is now that describes emergency metrics: Yet to be attended, Attending, Attended, Today's Total
+        - my problem with current implementation is that it is too big and taking alot of space.
+        - if we could create it in a small and consice manner, but still show all. It will be good.
+    - Filters are very abdrupt and big. I want the filters to be better implemented as per industry standards.
+        - datepicker is opening two date-pickers on mobile app
+        - on clicking datepicker, it opens and gets closed asap. Not usable on mobile size
+    - sidemenu needs to be re-done. It looks very old, I just need to have one good side-menu that is basic and responsive and simple - does the job and works well and looks decent. On both mobile and webapp.
+    - Ticket tiles are looking okay, a bit big on mobile app, let me know if there is a scope for improvement.
+- emergency/ticket: Looks decent, let me know if any scope of improvement.
+- Resident's Directory can be skipped for now.
+- Society Info - can be skipped for now
+
+FEEL FREE TO REVAMP THE WHOLE THING AS YOUR LIKINGS, ensuring few things:
+- The app should follow same navbar, header uniformity.
+- The colour scheme should be followed uniformly.
+- headers and navbar should be uniform in the whole app.
+- It should be responsive both for mobile and web
+- should be aligned to how mondern webapps are created in terms of design and UX
+- Feel free to do anything, as long as they cater to current requirement.
+- The screens covers right now what we require, but they are not showcasing the same in a better way.
