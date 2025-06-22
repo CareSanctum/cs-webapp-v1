@@ -84,12 +84,12 @@ const Login = () => {
                   />
                   <span className="text-gray-600">Remember me</span>
                 </label>
-                <Link 
+                {/* <Link 
                   to="/forgot-password" 
                   className="text-blue-600 hover:text-blue-700 font-medium"
                 >
                   Forgot password?
-                </Link>
+                </Link> */}
               </div>
 
               <Button 
@@ -110,14 +110,14 @@ const Login = () => {
                 )}
               </Button>
 
-              <div className="text-center pt-4 border-t border-gray-200">
+              {/* <div className="text-center pt-4 border-t border-gray-200">
                 <span className="text-sm text-gray-600">
                   Don't have an account?{' '}
                   <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
                     Sign up
                   </Link>
                 </span>
-              </div>
+              </div> */}
             </form>
           </CardContent>
         </Card>

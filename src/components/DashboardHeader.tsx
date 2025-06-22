@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -195,11 +196,16 @@ interface DashboardHeaderProps {
 }
 
 export const DashboardHeader = ({ onMobileMenuToggle }: DashboardHeaderProps) => {
+  const navigate = useNavigate();
   const [society, setSociety] = useState<Society>({
     id: "1",
     name: "Golden Heights Residency",
     logoUrl: undefined,
   });
+
+  const handleLogoClick = () => {
+    navigate('/');
+  };
 
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -223,7 +229,8 @@ export const DashboardHeader = ({ onMobileMenuToggle }: DashboardHeaderProps) =>
           <img 
             src="/logo.png" 
             alt="CareSanctum Logo" 
-            className="h-16 w-auto"
+            className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={handleLogoClick}
           />
           <div className="hidden sm:block">
             <h1 className="text-lg font-semibold text-gray-900">Emergency Dashboard</h1>
