@@ -1,4 +1,4 @@
-import { X, Users, Archive, LogOut, Home, Shield, Building2 } from "lucide-react";
+import { X, Users, Archive, LogOut, Home, Shield, Building2, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -41,6 +41,12 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       icon: Users,
       label: "Residents",
       href: "/residents",
+      description: "Directory"
+    },
+    {
+      icon: Briefcase,
+      label: "Staff",
+      href: "/staff",
       description: "Directory"
     },
     {

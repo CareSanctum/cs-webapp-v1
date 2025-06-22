@@ -163,7 +163,7 @@ const Index = () => {
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
                 <p className="text-gray-600 mt-1">
-                  Emergency response overview for {format(new Date(), "MMMM dd, yyyy")}
+                  Emergency response overview for {format(selectedDate, "MMMM dd, yyyy")}
                 </p>
               </div>
             </div>

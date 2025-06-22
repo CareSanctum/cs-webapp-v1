@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { Sidebar } from "@/components/Sidebar";
@@ -107,30 +106,12 @@ const Society = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 bg-blue-50 rounded-lg">
-                      <div className="text-2xl font-bold text-blue-700">{societyInfo.totalFlats}</div>
-                      <p className="text-sm text-blue-600">Total Flats</p>
-                    </div>
-                    <div className="text-center p-4 bg-green-50 rounded-lg">
-                      <div className="text-2xl font-bold text-green-700">{societyInfo.totalResidents}</div>
-                      <p className="text-sm text-green-600">Residents</p>
-                    </div>
-                    <div className="text-center p-4 bg-purple-50 rounded-lg">
-                      <div className="text-2xl font-bold text-purple-700">{societyInfo.emergencyContactsSetup}</div>
-                      <p className="text-sm text-purple-600">Emergency Setup</p>
-                    </div>
-                    <div className="text-center p-4 bg-orange-50 rounded-lg">
-                      <div className="text-2xl font-bold text-orange-700">{societyInfo.securityGuards}</div>
-                      <p className="text-sm text-orange-600">Security Guards</p>
-                    </div>
-                  </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Security Systems */}
-            <Card className="mb-6 bg-white/70 backdrop-blur-sm">
+            {/* <Card className="mb-6 bg-white/70 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-green-600" />
@@ -155,10 +136,10 @@ const Society = () => {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Facilities */}
-            <Card className="bg-white/70 backdrop-blur-sm">
+            {/* <Card className="bg-white/70 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Building className="h-5 w-5 text-blue-600" />
@@ -177,10 +158,10 @@ const Society = () => {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Emergency Contact */}
-            <div className="fixed bottom-4 right-4">
+            {/* <div className="fixed bottom-4 right-4">
               <Button 
                 size="lg" 
                 className="rounded-full shadow-lg"
@@ -189,7 +170,7 @@ const Society = () => {
                 <Phone className="h-5 w-5 mr-2" />
                 Emergency: {societyInfo.emergencyContact}
               </Button>
-            </div>
+            </div> */}
           </div>
         </main>
       </div>
