@@ -216,10 +216,22 @@ export const DashboardHeader = ({ onMobileMenuToggle }: DashboardHeaderProps) =>
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-white/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="flex h-16 items-center justify-between px-4 lg:px-6">
-        {/* Left Section - Logo and Mobile Menu */}
-        <div className="flex items-center gap-4">
+        {/* Left Section - Logo and Brand */}
+        <div className="flex items-center gap-3">
+          <img 
+            src="/logo.png" 
+            alt="CareSanctum Logo" 
+            className="h-16 w-auto"
+          />
+          <div className="hidden sm:block">
+            <h1 className="text-lg font-semibold text-gray-900">Emergency Dashboard</h1>
+          </div>
+        </div>
+
+        {/* Right Section - Mobile Menu Button */}
+        <div className="flex items-center">
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
@@ -229,32 +241,6 @@ export const DashboardHeader = ({ onMobileMenuToggle }: DashboardHeaderProps) =>
           >
             <Menu className="h-5 w-5" />
           </Button>
-
-          {/* Logo and Brand */}
-          <div className="flex items-center gap-3">
-            <img 
-              src="/logo.png" 
-              alt="CareSanctum Logo" 
-              className="h-16 w-auto"
-            />
-            <div className="hidden sm:block">
-              <h1 className="text-lg font-semibold text-gray-900">Emergency Dashboard</h1>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Section - User Menu Only */}
-        <div className="flex items-center">
-          {/* User Menu */}
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-              <span className="text-sm font-medium text-white">GS</span>
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-medium text-gray-900">Guard Singh</p>
-              <p className="text-xs text-gray-500">Security Officer</p>
-            </div>
-          </div>
         </div>
       </div>
     </header>

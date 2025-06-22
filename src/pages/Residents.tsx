@@ -1,13 +1,12 @@
-
 import { useState } from "react";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { Sidebar } from "@/components/Sidebar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Phone, MapPin, User, Users } from "lucide-react";
+import { Search, Phone, MapPin, User, Users, PhoneCall } from "lucide-react";
 
 // Mock resident data
 const mockResidents = [
@@ -50,17 +49,11 @@ const Residents = () => {
     resident.flatNumber.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const stats = {
-    total: residents.length,
-    active: residents.filter(r => r.status === "active").length,
-    inactive: residents.filter(r => r.status === "inactive").length,
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gray-50">
       <DashboardHeader onMobileMenuToggle={() => setIsSidebarOpen(true)} />
       
-      <div className="flex h-[calc(100vh-73px)] relative">
+      <div className="flex h-[calc(100vh-64px)] relative">
         {/* Mobile sidebar overlay */}
         {isSidebarOpen && (
           <div 
@@ -83,122 +76,72 @@ const Residents = () => {
         </div>
         
         <main className="flex-1 overflow-auto">
-          <div className="p-4 lg:p-8">
+          <div className="p-4 lg:p-6 space-y-6">
             {/* Header */}
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-slate-800 mb-2">Resident Directory</h1>
-              <p className="text-slate-600">Manage and view resident information</p>
-            </div>
-
-            {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-2xl font-bold text-blue-700">{stats.total}</div>
-                      <p className="text-sm text-blue-600">Total Residents</p>
-                    </div>
-                    <Users className="h-8 w-8 text-blue-500 opacity-70" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-2xl font-bold text-green-700">{stats.active}</div>
-                      <p className="text-sm text-green-600">Active</p>
-                    </div>
-                    <User className="h-8 w-8 text-green-500 opacity-70" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-2xl font-bold text-gray-700">{stats.inactive}</div>
-                      <p className="text-sm text-gray-600">Inactive</p>
-                    </div>
-                    <User className="h-8 w-8 text-gray-500 opacity-70" />
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold text-gray-900">Resident Directory</h1>
+              <p className="text-gray-600">Search for residents by name or flat number.</p>
             </div>
 
             {/* Search */}
-            <Card className="mb-6 bg-white/70 backdrop-blur-sm">
-              <CardContent className="p-4">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search residents by name or flat number..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-slate-300"
-                  />
-                </div>
-              </CardContent>
-            </Card>
+            <div className="sticky top-0 z-10 bg-gray-50/80 backdrop-blur-sm pt-4 pb-2 -mx-4 px-4 lg:-mx-6 lg:px-6">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  placeholder="Search residents by name or flat number..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 border-gray-300 bg-white"
+                />
+              </div>
+            </div>
 
             {/* Residents List */}
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {filteredResidents.map((resident) => (
-                <Card key={resident.id} className="shadow-sm hover:shadow-md transition-all bg-white/70 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-4 flex-1">
-                        <Avatar className="h-12 w-12">
-                          <AvatarFallback className="bg-purple-100 text-purple-700 font-semibold">
-                            {resident.name.split(' ').map(n => n[0]).join('')}
-                          </AvatarFallback>
-                        </Avatar>
-                        
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-semibold text-lg text-slate-800">{resident.name}</h3>
-                            <Badge variant={resident.status === 'active' ? 'default' : 'secondary'}>
-                              {resident.status}
-                            </Badge>
-                          </div>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-600">
-                            <div className="flex items-center gap-2">
-                              <MapPin className="h-4 w-4 text-slate-400" />
-                              <span>Flat {resident.flatNumber}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Phone className="h-4 w-4 text-slate-400" />
-                              <span>{resident.phoneNumber}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Users className="h-4 w-4 text-slate-400" />
-                              <span>{resident.emergencyContacts} Emergency Contacts</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Phone className="h-4 w-4 text-slate-400" />
-                              <span>NOK: {resident.nokPhone}</span>
-                            </div>
-                          </div>
+                <Card key={resident.id} className="shadow-sm hover:shadow-md transition-all bg-white border-gray-200">
+                  <CardContent className="p-4 space-y-4">
+                    <div className="flex items-start gap-4">
+                      <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
+                        <AvatarFallback className="bg-purple-100 text-purple-700 font-semibold">
+                          {resident.name.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-1">
+                          <h3 className="font-semibold text-lg text-gray-800 truncate">{resident.name}</h3>
                         </div>
                       </div>
-                      
-                      <div className="flex gap-2">
-                        <Button 
-                          size="sm" 
-                          style={{ backgroundColor: 'hsl(var(--caresanctum-purple))' }}
-                          className="text-white hover:opacity-90"
-                        >
-                          <Phone className="h-4 w-4 mr-1" />
-                          Call
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          View Details
-                        </Button>
+                    </div>
+
+                    <div className="space-y-3 text-sm text-gray-600 border-t border-gray-100 pt-4">
+                      <div className="flex items-center gap-3">
+                        <MapPin className="h-4 w-4 text-gray-400" />
+                        <span>Flat {resident.flatNumber}</span>
                       </div>
+                      <div className="flex items-center gap-3">
+                        <Phone className="h-4 w-4 text-gray-400" />
+                        <span>{resident.phoneNumber}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <PhoneCall className="h-4 w-4 text-gray-400" />
+                        <span>NOK: {resident.nokPhone}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Users className="h-4 w-4 text-gray-400" />
+                        <span>{resident.emergencyContacts} Emergency Contacts</span>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t border-gray-100 pt-4">
+                      <Button 
+                        size="sm" 
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        <Phone className="h-4 w-4 mr-2" />
+                        Call Resident
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -206,13 +149,13 @@ const Residents = () => {
             </div>
 
             {filteredResidents.length === 0 && (
-              <Card className="bg-white/70 backdrop-blur-sm">
+              <Card className="bg-white border-gray-200">
                 <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="h-8 w-8 text-slate-400" />
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-8 w-8 text-gray-400" />
                   </div>
-                  <h3 className="text-lg font-medium text-slate-700 mb-2">No residents found</h3>
-                  <p className="text-slate-500">Try adjusting your search criteria</p>
+                  <h3 className="text-lg font-medium text-gray-700 mb-2">No residents found</h3>
+                  <p className="text-gray-500">Try adjusting your search criteria</p>
                 </CardContent>
               </Card>
             )}

@@ -66,7 +66,19 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       style={{ width: sidebarWidth }}
     >
       {/* Header */}
-      <div className="flex items-center justify-end p-4 border-b border-gray-200">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <span className="text-sm font-medium text-white">GS</span>
+          </div>
+          {(!isCollapsed || isMobile) && (
+            <div>
+              <p className="text-sm font-medium text-gray-900">Guard Singh</p>
+              <p className="text-xs text-gray-500">Security Officer</p>
+            </div>
+          )}
+        </div>
+        
         {/* Mobile close button only */}
         {onClose && (
           <Button 
