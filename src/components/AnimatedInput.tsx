@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -35,8 +34,8 @@ export const AnimatedInput: React.FC<AnimatedInputProps> = ({
         className={cn(
           "peer w-full px-4 py-4 border-2 rounded-lg bg-white transition-all duration-300 focus:outline-none text-black placeholder-transparent",
           isFocused 
-            ? "border-cyan-400 shadow-cyan-200"
-            : "border-gray-300 hover:border-cyan-200",
+            ? "border-[#520C86] shadow-[#520C86]/20"
+            : "border-gray-300 hover:border-[#731F94]",
           className
         )}
         onFocus={handleFocus}
@@ -48,7 +47,7 @@ export const AnimatedInput: React.FC<AnimatedInputProps> = ({
         className={cn(
           "absolute left-4 px-1 transition-all duration-300 pointer-events-none bg-white",
           isFloating
-            ? "-top-2.5 text-sm text-cyan-400 font-semibold"
+            ? "-top-2.5 text-sm text-[#520C86] font-semibold"
             : "top-4 text-base text-gray-500 font-medium"
         )}
         style={{

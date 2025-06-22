@@ -1,7 +1,7 @@
 import { X, Users, Archive, LogOut, Home, Shield, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -68,7 +68,7 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#591089] to-[#84299C] flex items-center justify-center">
             <span className="text-sm font-medium text-white">GS</span>
           </div>
           {(!isCollapsed || isMobile) && (
@@ -103,13 +103,13 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
                 to={item.href}
                 className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
                   isActive 
-                    ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                    ? 'bg-purple-50 text-[#591089] border border-purple-200' 
                     : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <div className={`flex-shrink-0 p-1.5 rounded-md ${
                   isActive 
-                    ? 'bg-blue-100 text-blue-600' 
+                    ? 'bg-gradient-to-br from-[#591089] to-[#84299C] text-white' 
                     : 'text-gray-500 group-hover:text-gray-700'
                 }`}>
                   <item.icon className="h-5 w-5" />
@@ -130,9 +130,9 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       <div className="p-4 border-t border-gray-200">
         <Link
           to="/login"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200"
         >
-          <div className="flex-shrink-0 p-1.5 rounded-md text-gray-500">
+          <div className="flex-shrink-0 p-1.5 rounded-md text-red-500">
             <LogOut className="h-5 w-5" />
           </div>
           {(!isCollapsed || isMobile) && (
