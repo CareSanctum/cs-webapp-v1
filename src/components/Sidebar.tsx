@@ -44,6 +44,12 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       description: "Directory"
     },
     {
+      icon: Briefcase,
+      label: "Staff",
+      href: "/staff",
+      description: "Directory"
+    },
+    {
       icon: Building2,
       label: "Society",
       href: "/society",
