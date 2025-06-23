@@ -16,3 +16,17 @@ function getCookie (name: string) {
   export function getCSRFToken () {
     return getCookie('csrftoken')
   }
+
+  export function getUtcDayBounds(date: Date) {
+    // clone so we don’t mutate the original
+    const startLocal = new Date(date)
+    startLocal.setHours(0, 0, 0, 0)
+  
+    const endLocal = new Date(date)
+    endLocal.setHours(23, 59, 0, 0)
+  
+    return {
+      startUtcIso: startLocal.toISOString(),
+      endUtcIso:   endLocal.toISOString(),
+    }
+  }

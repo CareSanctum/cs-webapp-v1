@@ -1,8 +1,8 @@
-import { X, Users, Archive, LogOut, Home, Shield, Building2 } from "lucide-react";
+import { X, Users, Archive, LogOut, Home, Shield, Building2, Loader2, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
-
+import { useLogout } from "@/hooks/logout.hook";
 interface SidebarProps {
   onClose?: () => void;
 }
@@ -10,7 +10,7 @@ interface SidebarProps {
 export const Sidebar = ({ onClose }: SidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
-
+  const { mutate: handleLogout, status: logoutStatus} = useLogout();
   // Reset collapsed state on mobile
   useEffect(() => {
     const handleResize = () => {
@@ -31,12 +31,12 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       href: "/",
       description: "Emergency overview"
     },
-    // {
-    //   icon: Shield,
-    //   label: "Emergencies",
-    //   href: "/emergencies",
-    //   description: "Active incidents"
-    // },
+    {
+      icon: Briefcase,
+      label: "Staff",
+      href: "/staff",
+      description: "Directory"
+    },
     {
       icon: Users,
       label: "Residents",
@@ -128,17 +128,27 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
 
       {/* Footer */}
       <div className="p-4 border-t border-gray-200">
-        <Link
-          to="/login"
+        <Button
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200"
+          onClick={() => handleLogout()}
+          disabled={logoutStatus === 'pending'}
+          variant="ghost"
         >
-          <div className="flex-shrink-0 p-1.5 rounded-md text-red-500">
-            <LogOut className="h-5 w-5" />
-          </div>
-          {(!isCollapsed || isMobile) && (
-            <span className="font-medium text-sm">Sign Out</span>
+          {logoutStatus === 'pending' ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="animate-spin" />
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 p-1.5 rounded-md text-red-500">
+                <LogOut className="h-5 w-5" />
+              </div>
+              {(!isCollapsed || isMobile) && (
+                  <span className="font-medium text-sm">Sign Out</span>
+              )}
+            </div>
           )}
-        </Link>
+        </Button>
       </div>
     </div>
   );

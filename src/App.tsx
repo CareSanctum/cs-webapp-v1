@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./AuthContext";
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 import axios from "axios";
+import Staff from "./pages/Staff";
 axios.defaults.withCredentials = true;
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/staff" element={<Staff />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
