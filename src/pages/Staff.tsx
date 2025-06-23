@@ -9,7 +9,23 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Search, Phone, Mail, Briefcase, Building, Users, Loader2 } from "lucide-react";
 import { useStaffList } from "@/hooks/staffList.hook";
 
+const departmentColors: { [key: string]: string } = {
+  Security: "bg-red-100 text-red-700",
+  Administration: "bg-blue-100 text-blue-700",
+  Maintenance: "bg-green-100 text-green-700",
+  Housekeeping: "bg-purple-100 text-purple-700",
+};
 
+const Staff = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const { data: staffData, isLoading, error } = useStaffList();
+  const staff = staffData?.staffs || [];
+
+  const filteredStaff = staff.filter(member =>
+    (member.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    member.phone_number.includes(searchTerm)
   );
 
   return (
