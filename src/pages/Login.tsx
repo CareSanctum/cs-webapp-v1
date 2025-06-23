@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { AnimatedInput } from '@/components/AnimatedInput';
 import { Eye, EyeOff, Shield, ArrowRight, Loader2 } from 'lucide-react';
 import { useLogin } from '@/hooks/use-login.hook';
+import { useQueryClient } from "@tanstack/react-query";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,12 +13,13 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const {mutate, status} = useLogin();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     mutate({email, password}, {
       onSuccess: () => {
-        console.log('success');
+        queryClient.invalidateQueries({ queryKey: ['authStatus'] });
         navigate('/');
       },
     });

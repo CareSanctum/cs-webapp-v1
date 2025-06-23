@@ -1,13 +1,13 @@
 import axios from "axios";
 import { generateUrl } from "@/urls";
 import { getCSRFToken } from "@/utils";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 
 async function logout() {
     try {
         const csrfToken = getCSRFToken();
-        const response = await axios.delete(generateUrl('LOGOUT'),  {
+        const response = await axios.delete(generateUrl('AUTH'),  {
             headers: {
                 'X-CSRFToken': csrfToken,
             },
@@ -15,7 +15,7 @@ async function logout() {
         return response.data;
     }catch(error: any){
         // Treat 401 as successful logout (user is already logged out)
-        if (error.response?.status === 401) {
+        if (error.response?.status === 401 || error.response?.status === 410) {
             return error.response.data;
         }
         // Throw error for all other cases (server errors, network errors, etc.)
@@ -25,11 +25,12 @@ async function logout() {
 
 export function useLogout() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: logout,
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['authStatus'] });
             navigate('/login');
-            console.log('logged out');
         },
         onError: (error) => {
             console.error(error);
