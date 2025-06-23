@@ -106,6 +106,8 @@ const Society = () => {
                       </div>
                     </div>
                   </div>
+
+
                 </div>
               </CardContent>
             </Card>

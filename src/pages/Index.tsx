@@ -6,106 +6,66 @@ import { StatsCards } from "@/components/StatsCards";
 import { FilterControls } from "@/components/FilterControls";
 import { EmergencyIncident, IncidentStatus, IncidentType } from "@/types/emergency";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
+import { useTicketList } from "@/hooks/ticketList.hook";
+import { getCSRFToken, getUtcDayBounds } from "@/utils";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
 
-// Mock data for demonstration - using today's date
-const mockIncidents: EmergencyIncident[] = [{
-  id: "1",
-  residentName: "Mrs. Priya Sharma",
-  phoneNumber: "+91 *****210",
-  flatNumber: "A-101",
-  incidentType: "sos",
-  nokPhone: "+91 *****211",
-  timestamp: new Date("2025-06-14T10:20:00"),
-  status: "yet_to_attend",
-  description: "Emergency SOS button pressed"
-}, {
-  id: "2",
-  residentName: "Mr. Rajesh Kumar",
-  phoneNumber: "+91 *****212",
-  flatNumber: "B-205",
-  incidentType: "fire_alarm",
-  nokPhone: "+91 *****213",
-  timestamp: new Date("2025-06-14T09:50:00"),
-  status: "attending",
-  description: "Fire alarm triggered in kitchen"
-}, {
-  id: "3",
-  residentName: "Mrs. Sunita Gupta",
-  phoneNumber: "+91 *****214",
-  flatNumber: "C-302",
-  incidentType: "fall_detection",
-  nokPhone: "+91 *****215",
-  timestamp: new Date("2025-06-14T09:20:00"),
-  status: "attended",
-  description: "Fall detected in bedroom"
-}, {
-  id: "4",
-  residentName: "Mr. Amit Patel",
-  phoneNumber: "+91 *****216",
-  flatNumber: "D-401",
-  incidentType: "gas_leak",
-  nokPhone: "+91 *****217",
-  timestamp: new Date("2025-06-14T11:15:00"),
-  status: "yet_to_attend",
-  description: "Gas leak detected in kitchen area"
-}, {
-  id: "5",
-  residentName: "Mrs. Kavita Singh",
-  phoneNumber: "+91 *****218",
-  flatNumber: "E-103",
-  incidentType: "smoke_detector",
-  nokPhone: "+91 *****219",
-  timestamp: new Date("2025-06-14T08:30:00"),
-  status: "attended",
-  description: "Smoke detected in living room"
-}, {
-  id: "6",
-  residentName: "Mr. Deepak Joshi",
-  phoneNumber: "+91 *****220",
-  flatNumber: "F-506",
-  incidentType: "sos",
-  nokPhone: "+91 *****221",
-  timestamp: new Date("2025-06-14T12:45:00"),
-  status: "attending",
-  description: "Medical emergency - SOS activated"
-}, {
-  id: "7",
-  residentName: "Mrs. Rekha Mehta",
-  phoneNumber: "+91 *****222",
-  flatNumber: "G-208",
-  incidentType: "fall_detection",
-  nokPhone: "+91 *****223",
-  timestamp: new Date("2025-06-14T07:10:00"),
-  status: "attended",
-  description: "Fall detected in bathroom"
-}, {
-  id: "8",
-  residentName: "Mr. Suresh Agarwal",
-  phoneNumber: "+91 *****224",
-  flatNumber: "H-304",
-  incidentType: "fire_alarm",
-  nokPhone: "+91 *****225",
-  timestamp: new Date("2025-06-14T13:20:00"),
-  status: "yet_to_attend",
-  description: "Fire alarm activated in bedroom"
-}];
+
 
 const Index = () => {
-  const [incidents] = useState<EmergencyIncident[]>(mockIncidents);
   const [statusFilter, setStatusFilter] = useState<IncidentStatus | "all">("all");
   const [typeFilter, setTypeFilter] = useState<IncidentType | "all">("all");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  
-  const filteredIncidents = incidents.filter(incident => {
-    const matchesStatus = statusFilter === "all" || incident.status === statusFilter;
-    const matchesType = typeFilter === "all" || incident.incidentType === typeFilter;
-    const matchesDate = incident.timestamp.toDateString() === selectedDate.toDateString();
-    return matchesStatus && matchesType && matchesDate;
-  });
+  const [isOverviewExpanded, setIsOverviewExpanded] = useState(true);
+  const isoString = selectedDate.toISOString()
+  // console.log(isoString);
+
+  // Convert filter values to API parameters
+  const getApiParams = () => {
+    const { startUtcIso, endUtcIso } = getUtcDayBounds(selectedDate);
+
+    const params: any = {
+      date_from: startUtcIso,
+      date_to: endUtcIso,
+    };
+    // console.log({startUtcIso, endUtcIso});
+
+    if (statusFilter !== "all") {
+      params.status = statusFilter;
+    }
+
+    if (typeFilter !== "all") {
+      params.type = typeFilter;
+    }
+
+    return params;
+  };
+
+  // Use the ticket list hook with current filter parameters
+  const { data: ticketData, isLoading, error } = useTicketList(getApiParams());
+
+  // Convert API tickets to EmergencyIncident format for compatibility
+  const incidents: EmergencyIncident[] = ticketData?.tickets?.map(ticket => ({
+    id: ticket.id.toString(),
+    residentName: ticket.user_initiated.full_name,
+    phoneNumber: ticket.user_initiated.phone_number,
+    flatNumber: "N/A", // API doesn't provide this, you might need to add it
+    incidentType: ticket.type.code as IncidentType,
+    nokPhone: "N/A", // API doesn't provide this, you might need to add it
+    timestamp: new Date(ticket.created_at),
+    status: ticket.status as IncidentStatus,
+    description: `${ticket.type.name} - ${ticket.user_initiated.full_name}`,
+  })) || [];
+
   
   const todayIncidents = incidents.filter(incident => incident.timestamp.toDateString() === new Date().toDateString());
   
@@ -168,8 +128,36 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Stats Cards */}
-            <div>
+            {/* Stats Cards - Mobile/Tablet (Collapsible) */}
+            <div className="lg:hidden">
+              <Collapsible
+                open={isOverviewExpanded}
+                onOpenChange={setIsOverviewExpanded}
+                className="space-y-4"
+              >
+                <CollapsibleTrigger asChild>
+                  <div
+                    role="button"
+                    className="flex cursor-pointer items-center gap-2"
+                  >
+                    <h2 className="text-lg font-semibold text-gray-900">
+                      Today's Overview
+                    </h2>
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        isOverviewExpanded ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <StatsCards stats={stats} />
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+
+            {/* Stats Cards - Desktop (Always Visible) */}
+            <div className="hidden lg:block">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Today's Overview</h2>
               <StatsCards stats={stats} />
             </div>
@@ -194,7 +182,22 @@ const Index = () => {
             </div>
             
             {/* Emergency Alerts List */}
-            {filteredIncidents.length === 0 ? (
+            {isLoading ? (
+              <Card className="border-0 shadow-sm bg-white/70 backdrop-blur-sm">
+                <CardContent className="p-8 text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <p className="text-slate-600">Loading incidents...</p>
+                </CardContent>
+              </Card>
+            ) : error ? (
+              <Card className="border-red-200 bg-red-50">
+                <CardContent className="p-8 text-center">
+                  <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-red-700 mb-2">Error Loading Data</h3>
+                  <p className="text-red-600">Failed to load incident data. Please try again.</p>
+                </CardContent>
+              </Card>
+            ) : incidents.length === 0 ? (
               <Card className="border-0 shadow-sm bg-white">
                 <CardContent className="p-8 text-center">
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -210,7 +213,7 @@ const Index = () => {
               </Card>
             ) : (
               <div className="space-y-3">
-                {filteredIncidents.map(incident => (
+                {incidents.map(incident => (
                   <EmergencyAlertItem key={incident.id} incident={incident} />
                 ))}
               </div>
