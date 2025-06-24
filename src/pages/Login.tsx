@@ -8,7 +8,7 @@ import { useLogin } from '@/hooks/use-login.hook';
 import { useQueryClient } from "@tanstack/react-query";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({email, password}, {
+    mutate({username, password}, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['authStatus'] });
         navigate('/');
@@ -46,10 +46,10 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <AnimatedInput
-                  type="email"
-                  label="Email Address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  label="Email / Phone Number"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                   className="bg-white border-gray-300 focus:border-[#3d007d] "
                 />
