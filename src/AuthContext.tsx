@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect } from "react";
 import { useAuthStatus } from "./hooks/authStatus.hook";
 import { useLocation, useNavigate } from "react-router";
+import { Loader2 } from "lucide-react";
 
 const AuthContext = createContext(null);
 
@@ -22,56 +23,38 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let user = null;
     let statusCode = null;
 
-    if (data) {
-        isAuthenticated = true;
-        user = data.user || null;
-        statusCode = 200;
-    } else if (isError) {
-        // Try to get status from error object
+    //set status code 
+    if (isError) {
         const err = error as any;
-        if (err?.response?.status) {
-            statusCode = err.response.status;
-        } else if (err?.message?.includes('401')) {
-            statusCode = 401;
-        } else if (err?.message?.includes('410')) {
-            statusCode = 410;
-        }
+        statusCode = err?.response?.status;
     }
 
     useEffect(() => {
-        if (isLoading) return;
-        // If not authenticated (401/410), redirect to login (unless already there)
-        if ((statusCode === 401 || statusCode === 410) && location.pathname !== '/login') {
-            navigate('/login', { replace: true });
+        if (statusCode === 401 || statusCode === 410) {
+          navigate('/login', { replace: true });
         }
-        // If authenticated and on login, redirect to home
-        if (isAuthenticated && location.pathname === '/login') {
-            navigate('/', { replace: true });
-        }
-    }, [isAuthenticated, statusCode, isLoading, location.pathname, navigate]);
+      }, [statusCode, navigate]);
 
-    // Optionally, show a loading indicator while checking auth
+    // loading state
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="h-screen w-screen flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+        );
     }
-    if (isError) {
-        if (
-            statusCode === 401 ||
-            statusCode === 410
-        ) {
-            // Not authenticated, let redirect happen, but always render children on login/signup/verify-email
-            if (
-                location.pathname === '/login' ||
-                location.pathname === '/signup' ||
-                location.pathname === '/verify-email'
-            ) {
-                return <AuthContext.Provider value={{ isAuthenticated, statusCode }}>{children}</AuthContext.Provider>;
-            }
-            // For all other routes, let ProtectedRoute handle the redirect
-            return null;
-        }
-        // For all other errors, show the error message
-        return <div>Error: {error?.message || 'Unknown error'}</div>;
+    // error state
+    if (isError && statusCode !== 401 && statusCode !== 410) {
+        return (
+          <div className="h-screen w-screen flex items-center justify-center">
+            Something went wrong. Please try again later.
+          </div>
+        );
+      }
+
+    if (data) {
+        isAuthenticated = true;
+        statusCode = 200;
     }
 
     return (

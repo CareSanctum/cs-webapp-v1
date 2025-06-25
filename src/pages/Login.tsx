@@ -6,6 +6,7 @@ import { AnimatedInput } from '@/components/AnimatedInput';
 import { Eye, EyeOff, Shield, ArrowRight, Loader2 } from 'lucide-react';
 import { useLogin } from '@/hooks/use-login.hook';
 import { useQueryClient } from "@tanstack/react-query";
+import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,14 +15,27 @@ const Login = () => {
   const navigate = useNavigate();
   const {mutate, status} = useLogin();
   const queryClient = useQueryClient();
+  const {toast} = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     mutate({email, password}, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['authStatus'] });
+        toast({
+          title: 'Success',
+          description: 'You have been logged in.',
+          variant: 'default',
+        });
         navigate('/');
       },
+      onError: (error) => {
+        toast({
+          title: 'Error',
+          description: 'An error has occurred. Please try again.',
+          variant: 'destructive',
+        });
+      }
     });
   };
 

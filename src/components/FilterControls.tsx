@@ -101,11 +101,11 @@ export const FilterControls = ({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="sos">SOS Emergency</SelectItem>
-                    <SelectItem value="fire_alarm">Fire Alarm</SelectItem>
-                    <SelectItem value="smoke_detector">Smoke Detected</SelectItem>
-                    <SelectItem value="gas_leak">Gas Leak</SelectItem>
-                    <SelectItem value="fall_detection">Fall Detection</SelectItem>
+                    <SelectItem value="PHYSICAL_SOS">Phsyical SOS Button</SelectItem>
+                    <SelectItem value="SMOKE_DETECTED">Smoke Detected</SelectItem>
+                    <SelectItem value="GAS_LEAKAGE">Gas Leak</SelectItem>
+                    <SelectItem value="FALL_DETECTED">Fall Detected</SelectItem>
+                    <SelectItem value="WATCH_SOS">Watch SOS</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -166,11 +166,11 @@ export const FilterControls = ({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="sos">SOS Emergency</SelectItem>
-                    <SelectItem value="fire_alarm">Fire Alarm</SelectItem>
-                    <SelectItem value="smoke_detector">Smoke Detected</SelectItem>
-                    <SelectItem value="gas_leak">Gas Leak</SelectItem>
-                    <SelectItem value="fall_detection">Fall Detection</SelectItem>
+                    <SelectItem value="PHYSICAL_SOS">Phsyical SOS Button</SelectItem>
+                    <SelectItem value="SMOKE_DETECTED">Smoke Detected</SelectItem>
+                    <SelectItem value="GAS_LEAKAGE">Gas Leak</SelectItem>
+                    <SelectItem value="FALL_DETECTED">Fall Detected</SelectItem>
+                    <SelectItem value="WATCH_SOS">Watch SOS</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

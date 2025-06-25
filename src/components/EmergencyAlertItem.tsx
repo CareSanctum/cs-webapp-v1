@@ -91,7 +91,7 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
   };
 
   return (
-    <Card className={`shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer bg-gradient-to-r ${getStatusBackground(incident.status)} border-l-4 ${incident.status === 'yet_to_attend' ? 'border-l-red-500' : incident.status === 'attending' ? 'border-l-yellow-500' : 'border-l-green-500'}`}>
+    <Card className={`shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer bg-gradient-to-r ${getStatusBackground(incident.status)} border-l-4 ${incident.status === 'OPEN' ? 'border-l-red-500' : incident.status === 'attending' ? 'border-l-yellow-500' : 'border-l-green-500'}`}>
       <CardContent className="p-0">
         <Link to={`/emergency/${incident.id}`} className="block">
           <div className="p-4">
@@ -109,7 +109,7 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
                       </h3>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge className={`px-2 py-0.5 text-xs font-medium border ${getStatusColor(incident.status)} flex-shrink-0`}>
-                          {incident.status === "yet_to_attend" ? "URGENT" : 
+                          {incident.status === "OPEN" ? "URGENT" : 
                            incident.status === "attending" ? "IN PROGRESS" : "RESOLVED"}
                         </Badge>
                         <div className="flex items-center gap-1 text-xs text-gray-600">

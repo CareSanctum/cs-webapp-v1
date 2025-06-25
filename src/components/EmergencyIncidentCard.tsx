@@ -12,11 +12,12 @@ interface EmergencyIncidentCardProps {
 }
 
 export const EmergencyIncidentCard = ({ incident }: EmergencyIncidentCardProps) => {
+  console.log("incidents", incident);
   const [status, setStatus] = useState<IncidentStatus>(incident.status);
 
   const getStatusColor = (status: IncidentStatus) => {
     switch (status) {
-      case "yet_to_attend": return "bg-red-100 text-red-800 border-red-200";
+      case "OPEN": return "bg-red-100 text-red-800 border-red-200";
       case "attending": return "bg-yellow-100 text-yellow-800 border-yellow-200";
       case "attended": return "bg-green-100 text-green-800 border-green-200";
     }
@@ -24,7 +25,7 @@ export const EmergencyIncidentCard = ({ incident }: EmergencyIncidentCardProps) 
 
   const getStatusLabel = (status: IncidentStatus) => {
     switch (status) {
-      case "yet_to_attend": return "Yet to Attend";
+      case "OPEN": return "OPEN";
       case "attending": return "Attending";
       case "attended": return "Attended";
     }
@@ -32,11 +33,11 @@ export const EmergencyIncidentCard = ({ incident }: EmergencyIncidentCardProps) 
 
   const getIncidentTypeInfo = (type: string) => {
     switch (type) {
-      case "sos": return { label: "SOS Alert", color: "bg-red-500", priority: "URGENT" };
-      case "fire_alarm": return { label: "Fire Alarm", color: "bg-orange-500", priority: "CRITICAL" };
-      case "smoke_detector": return { label: "Smoke Detector", color: "bg-orange-400", priority: "HIGH" };
-      case "gas_leak": return { label: "Gas Leak", color: "bg-yellow-500", priority: "HIGH" };
-      case "fall_detection": return { label: "Fall Detection", color: "bg-purple-500", priority: "URGENT" };
+      case "PHSYICAL_SOS": return { label: "SOS Alert", color: "bg-red-500", priority: "URGENT" };
+      case "WATCH_SOS": return { label: "Watch SOS", color: "bg-orange-500", priority: "CRITICAL" };
+      case "SMOKE_DETECTED": return { label: "Smoke Detected", color: "bg-orange-400", priority: "HIGH" };
+      case "GAS_LEAKAGE": return { label: "Gas Leakage", color: "bg-yellow-500", priority: "HIGH" };
+      case "FALL_DETECTED": return { label: "Fall Detected", color: "bg-purple-500", priority: "URGENT" };
       default: return { label: "Unknown", color: "bg-gray-500", priority: "NORMAL" };
     }
   };
@@ -49,7 +50,7 @@ export const EmergencyIncidentCard = ({ incident }: EmergencyIncidentCardProps) 
 
   return (
     <Card className={`transition-all duration-200 hover:shadow-md ${
-      status === "yet_to_attend" ? "ring-2 ring-red-200" : ""
+      status === "OPEN" ? "ring-2 ring-red-200" : ""
     }`}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">

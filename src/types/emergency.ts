@@ -1,12 +1,12 @@
 export type IncidentType = 
-  | "sos" 
-  | "fire_alarm" 
-  | "smoke_detector" 
-  | "gas_leak" 
-  | "fall_detection";
+  | "PHSYICAL_SOS" 
+  | "WATCH_SOS" 
+  | "SMOKE_DETECTED" 
+  | "GAS_LEAKAGE" 
+  | "FALL_DETECTED";
 
 export type IncidentStatus = 
-  | "yet_to_attend" 
+  | "OPEN" 
   | "attending" 
   | "attended";
 

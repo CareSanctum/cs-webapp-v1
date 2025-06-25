@@ -27,8 +27,6 @@ const Index = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [isOverviewExpanded, setIsOverviewExpanded] = useState(true);
   const isoString = selectedDate.toISOString()
-  // console.log(isoString);
-
   // Convert filter values to API parameters
   const getApiParams = () => {
     const { startUtcIso, endUtcIso } = getUtcDayBounds(selectedDate);
@@ -55,22 +53,22 @@ const Index = () => {
 
   // Convert API tickets to EmergencyIncident format for compatibility
   const incidents: EmergencyIncident[] = ticketData?.tickets?.map(ticket => ({
-    id: ticket.id.toString(),
-    residentName: ticket.user_initiated.full_name,
-    phoneNumber: ticket.user_initiated.phone_number,
-    flatNumber: "N/A", // API doesn't provide this, you might need to add it
-    incidentType: ticket.type.code as IncidentType,
-    nokPhone: "N/A", // API doesn't provide this, you might need to add it
-    timestamp: new Date(ticket.created_at),
-    status: ticket.status as IncidentStatus,
-    description: `${ticket.type.name} - ${ticket.user_initiated.full_name}`,
+    id: ticket.id?.toString() ?? '',
+    residentName: ticket.user_initiated?.full_name ?? 'Unknown',
+    phoneNumber: ticket.user_initiated?.phone_number ?? 'N/A',
+    flatNumber: 'N/A',
+    incidentType: (ticket.type?.code as IncidentType) ?? "PHSYICAL_SOS",
+    nokPhone: 'N/A',
+    timestamp: ticket.created_at ? new Date(ticket.created_at) : new Date(),
+    status: (ticket.status as IncidentStatus) ?? "OPEN",
+    description: `${ticket.type?.name ?? 'Unknown'} - ${ticket.user_initiated?.full_name ?? ''}`,
   })) || [];
 
   
   const todayIncidents = incidents.filter(incident => incident.timestamp.toDateString() === new Date().toDateString());
   
   const stats = {
-    yetToAttend: todayIncidents.filter(i => i.status === "yet_to_attend").length,
+    yetToAttend: todayIncidents.filter(i => i.status === "OPEN").length,
     attending: todayIncidents.filter(i => i.status === "attending").length,
     attended: todayIncidents.filter(i => i.status === "attended").length,
     total: todayIncidents.length

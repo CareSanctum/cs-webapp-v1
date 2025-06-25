@@ -1,8 +1,10 @@
-import { X, Users, Archive, LogOut, Home, Shield, Building2, Loader2, Briefcase } from "lucide-react";
+import { X, Users, Archive, LogOut, Home, Shield, Building2, Loader2, Briefcase, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import { useLogout } from "@/hooks/logout.hook";
+import { useResidentList } from "@/hooks/residentList.hook";
+import { useStaffList } from "@/hooks/staffList.hook";
 interface SidebarProps {
   onClose?: () => void;
 }
@@ -11,6 +13,8 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
   const { mutate: handleLogout, status: logoutStatus} = useLogout();
+  const {data: residentList, status: residentListstatus} = useResidentList();
+  const {data: staffList, status: staffListStatus} = useStaffList();
   // Reset collapsed state on mobile
   useEffect(() => {
     const handleResize = () => {
@@ -31,36 +35,20 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       href: "/",
       description: "Emergency overview"
     },
-    {
-      icon: Briefcase,
-      label: "Staff",
-      href: "/staff",
-      description: "Directory"
-    },
-    {
-      icon: Users,
-      label: "Residents",
-      href: "/residents",
-      description: "Directory"
-    },
-    {
-      icon: Briefcase,
-      label: "Staff",
-      href: "/staff",
-      description: "Directory"
-    },
+    ... ( staffListStatus === 'success' 
+      ? [{ icon: Briefcase, label: "Staff", href: "/staff", description: "Directory" }]
+      : []
+    ),
+    ... ( residentListstatus === 'success' 
+      ? [{ icon: Users, label: "Residents", href: "/residents", description: "Directory"}]
+      : []
+    ),
     {
       icon: Building2,
       label: "Society",
       href: "/society",
       description: "Information"
     },
-    // {
-    //   icon: Archive,
-    //   label: "Reports",
-    //   href: "/reports",
-    //   description: "Analytics"
-    // }
   ];
 
   const isMobile = window.innerWidth < 1024;
@@ -73,17 +61,27 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => window.location.assign('/profile')}
+          className="flex items-center gap-3 group focus:outline-none w-full text-left transition-colors duration-200 hover:bg-gray-50 rounded-lg px-2 py-1"
+          tabIndex={0}
+        >
           <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#591089] to-[#84299C] flex items-center justify-center">
             <span className="text-sm font-medium text-white">GS</span>
           </div>
           {(!isCollapsed || isMobile) && (
-            <div>
-              <p className="text-sm font-medium text-gray-900">Guard Singh</p>
-              <p className="text-xs text-gray-500">Security Officer</p>
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <div>
+                <p className="text-sm font-medium text-gray-900 group-hover:underline group-focus:underline">Guard Singh</p>
+                <p className="text-xs text-gray-500">Security Officer</p>
+              </div>
+              <span className="ml-auto">
+                <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+              </span>
             </div>
           )}
-        </div>
+        </button>
         
         {/* Mobile close button only */}
         {onClose && (
