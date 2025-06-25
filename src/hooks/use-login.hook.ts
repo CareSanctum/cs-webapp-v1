@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "@/axios";
 import { generateUrl } from "@/urls";
 import { useMutation } from "@tanstack/react-query";
 import { getCSRFToken } from "@/utils";
