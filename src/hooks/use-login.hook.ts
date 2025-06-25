@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios from "@/axios";
 import { generateUrl } from "@/urls";
 import { useMutation } from "@tanstack/react-query";
 import { getCSRFToken } from "@/utils";
 
-async function login({email, password}: {email: string, password: string}) {
+async function login({username, password}: {username: string, password: string}) {
     try {
         const csrfToken = getCSRFToken();
         const response = await axios.post(generateUrl('LOGIN'), {
-            email,
+            username,
             password,
         }, {
             headers: {

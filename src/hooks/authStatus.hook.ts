@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "@/axios";
 import { generateUrl } from "@/urls";
 import { useQuery } from "@tanstack/react-query";
 

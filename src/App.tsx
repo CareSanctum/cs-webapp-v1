@@ -17,7 +17,15 @@ import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+    },
+  },
+});
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated, statusCode } = useAuthContext();
