@@ -1,9 +1,8 @@
 import { Link } from "react-router";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { EmergencyIncident } from "@/types/emergency";
-import { AlertTriangle, Clock, MapPin, User, Phone, ChevronRight, PhoneCall, Flame, Zap, Droplets, Activity } from "lucide-react";
+import { AlertTriangle, Clock, MapPin, User, ChevronRight, Flame, Zap, Droplets, Activity } from "lucide-react";
 
 interface EmergencyAlertItemProps {
   incident: EmergencyIncident;
@@ -78,18 +77,6 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
     });
   };
 
-  const handleCallResident = (e: React.MouseEvent, phoneNumber: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.open(`tel:${phoneNumber}`, '_self');
-  };
-
-  const handleCallNOK = (e: React.MouseEvent, phoneNumber: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.open(`tel:${phoneNumber}`, '_self');
-  };
-
   return (
     <Card className={`shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer bg-gradient-to-r ${getStatusBackground(incident.status)} border-l-4 ${incident.status === 'OPEN' ? 'border-l-red-500' : incident.status === 'attending' ? 'border-l-yellow-500' : 'border-l-green-500'}`}>
       <CardContent className="p-0">
@@ -143,27 +130,6 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
             </div>
           </div>
         </Link>
-        
-        {/* Action Buttons */}
-        <div className="px-4 pb-4 flex gap-2 border-t border-white/50 pt-3">
-          <Button
-            size="sm"
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs"
-            onClick={(e) => handleCallResident(e, incident.phoneNumber)}
-          >
-            <Phone className="h-3 w-3 mr-1" />
-            Call Resident
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-xs"
-            onClick={(e) => handleCallNOK(e, incident.nokPhone)}
-          >
-            <PhoneCall className="h-3 w-3 mr-1" />
-            Call NOK
-          </Button>
-        </div>
       </CardContent>
     </Card>
   );

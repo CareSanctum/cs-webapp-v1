@@ -131,16 +131,6 @@ const Staff = () => {
                             <span>{member.email}</span>
                           </div>
                         </div>
-                        
-                        <div className="border-t border-gray-100 pt-4">
-                          <Button 
-                            size="sm" 
-                            className="w-full bg-[#e9d5ff] hover:bg-[#691990] text-white border-0"
-                          >
-                            <Phone className="h-4 w-4 mr-2" />
-                            Contact Staff
-                          </Button>
-                        </div>
                       </CardContent>
                     </Card>
                   ))}
