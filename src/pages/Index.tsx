@@ -16,6 +16,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/store/AuthStore";
 
 
 
@@ -27,6 +28,8 @@ const Index = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [isOverviewExpanded, setIsOverviewExpanded] = useState(true);
   const isoString = selectedDate.toISOString()
+  const username = useAuthStore(state => state.username)
+  console.log(username);
   // Convert filter values to API parameters
   const getApiParams = () => {
     const { startUtcIso, endUtcIso } = getUtcDayBounds(selectedDate);

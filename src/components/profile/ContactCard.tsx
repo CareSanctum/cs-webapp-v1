@@ -52,7 +52,7 @@ export const ContactCard = ({ contact }: ContactProps) => {
           <div className="md:col-span-2">
             <p className="text-sm text-gray-500">Address</p>
             <p className="font-medium">
-              { contact.address && contact.pincode ? complete_address : ""}
+              { contact.address && contact.pincode ? complete_address : "No Complete address found"}
             </p>
           </div>
           <div className="md:col-span-2">

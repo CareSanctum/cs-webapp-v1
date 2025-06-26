@@ -5,6 +5,10 @@ import { Link, useLocation } from "react-router";
 import { useLogout } from "@/hooks/logout.hook";
 import { useResidentList } from "@/hooks/residentList.hook";
 import { useStaffList } from "@/hooks/staffList.hook";
+import { useAuthStore } from "@/store/AuthStore";
+import { viewRequest } from "@/viewRequest";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+
 interface SidebarProps {
   onClose?: () => void;
 }
@@ -13,8 +17,24 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
   const { mutate: handleLogout, status: logoutStatus} = useLogout();
+  const username = useAuthStore(state => state.username);
   const {data: residentList, status: residentListstatus} = useResidentList();
   const {data: staffList, status: staffListStatus} = useStaffList();
+  const [fullName, setFullName] = useState('');
+  const [profilepictureurl, setProfilePictureUrl] = useState('');
+
+  const fetchprofileData = async () => {
+    try {
+      const data = await viewRequest(username);  // Call the function
+      setProfilePictureUrl(data?.patient?.profile_picture_url || "");
+      setFullName(data?.patient?.full_name || "");
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+    useEffect(() => {
+      fetchprofileData();  // Run the function on mount
+    }, [username]);
   // Reset collapsed state on mobile
   useEffect(() => {
     const handleResize = () => {
@@ -67,14 +87,16 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
           className="flex items-center gap-3 group focus:outline-none w-full text-left transition-colors duration-200 hover:bg-gray-50 rounded-lg px-2 py-1"
           tabIndex={0}
         >
-          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#591089] to-[#84299C] flex items-center justify-center">
-            <span className="text-sm font-medium text-white">GS</span>
-          </div>
+          <Avatar className="h-8 w-8">
+            {profilepictureurl ? (
+              <AvatarImage src={profilepictureurl} alt={fullName || 'User Avatar'} />
+            ) : null}
+            <AvatarFallback>{fullName ? fullName[0] : 'U'}</AvatarFallback>
+          </Avatar>
           {(!isCollapsed || isMobile) && (
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <div>
-                <p className="text-sm font-medium text-gray-900 group-hover:underline group-focus:underline">Guard Singh</p>
-                <p className="text-xs text-gray-500">Security Officer</p>
+                <p className="text-sm font-medium text-gray-900 group-hover:underline group-focus:underline truncate max-w-[120px]">{fullName || 'User'}</p>
               </div>
               <span className="ml-auto">
                 <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-colors" />

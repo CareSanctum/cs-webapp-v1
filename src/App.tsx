@@ -10,11 +10,13 @@ import VerifyEmail from "./pages/VerifyEmail";
 import Residents from "./pages/Residents";
 import Society from "./pages/Society";
 import Staff from "./pages/Staff";
+import Profile from "./pages/Profile";
 import EmergencyDetail from "./pages/EmergencyDetail";
 import NotFound from "./pages/NotFound";
 import { AuthProvider, useAuthContext } from "./AuthContext";
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 import axios from "axios";
+import Onboarding from "./pages/Onboarding";
 axios.defaults.withCredentials = true;
 
 const queryClient = new QueryClient({
@@ -55,6 +57,8 @@ const App = () => (
           <Route path="/residents" element={<ProtectedRoute><Residents /></ProtectedRoute>} />
           <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
           <Route path="/society" element={<ProtectedRoute><Society /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

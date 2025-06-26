@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect } from "react";
 import { useAuthStatus } from "./hooks/authStatus.hook";
 import { useLocation, useNavigate } from "react-router";
 import { Loader2 } from "lucide-react";
+import { useAuthStore } from "./store/AuthStore";
 
 const AuthContext = createContext(null);
 
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data, isLoading, isError, error } = useAuthStatus();
     const navigate = useNavigate();
     const location = useLocation();
+    const setusername = useAuthStore(state => state.setusername)
 
     // Determine auth status from API response or error
     let isAuthenticated = false;
@@ -55,7 +57,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (data) {
         isAuthenticated = true;
         statusCode = 200;
+        
     }
+    setusername(data?.data?.user?.username);
+    
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, statusCode }}>

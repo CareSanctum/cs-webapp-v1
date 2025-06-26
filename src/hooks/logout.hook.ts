@@ -1,7 +1,8 @@
-import axios from "@/axios";
+import { useAuthStore } from "@/store/AuthStore";
 import { generateUrl } from "@/urls";
 import { getCSRFToken } from "@/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { useNavigate } from "react-router";
 
 async function logout() {
@@ -26,10 +27,12 @@ async function logout() {
 export function useLogout() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const clearusername = useAuthStore(state => state.clearusername)
     return useMutation({
         mutationFn: logout,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['authStatus'] });
+            clearusername();
             navigate('/login');
         },
         onError: (error) => {

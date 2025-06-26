@@ -7,6 +7,7 @@ import { Eye, EyeOff, Shield, ArrowRight, Loader2 } from 'lucide-react';
 import { useLogin } from '@/hooks/use-login.hook';
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from '@/hooks/use-toast';
+import { useAuthStore } from '@/store/AuthStore';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -22,11 +23,6 @@ const Login = () => {
     mutate({username, password}, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['authStatus'] });
-        toast({
-          title: 'Success',
-          description: 'You have been logged in.',
-          variant: 'default',
-        });
         navigate('/');
       },
       onError: (error) => {

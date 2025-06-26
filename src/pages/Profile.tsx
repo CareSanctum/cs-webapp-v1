@@ -1,23 +1,26 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { LogOut, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { PersonalInfoCard } from '@/components/profile/PersonalInfoCard';
 import { ContactCard } from '@/components/profile/ContactCard';
 import { EmergencyContactCard } from '@/components/profile/EmergencyContactCard';
-import { MedicalInfoCard } from '@/components/profile/MedicalInfoCard';
+import { MedicalInfoCard } from '@/components/profile/MedicalInforCard';
 import { LifestyleCard } from '@/components/profile/LifestyleCard';
 import { useEffect } from 'react';
 import { viewRequest } from '@/viewRequest';
 import { useState } from 'react';
+import { useAuthStore } from '@/store/AuthStore';
 
 const Profile = () => {
   const navigate = useNavigate();
   
   const [userDetails, setUserDetails] = useState<any>(null);
+  const username = useAuthStore(state => state.username);
+
   useEffect(() => {
-  const fetchUserDetails = async () => {
+    const fetchUserDetails = async () => {
       try {
         const data = await viewRequest(username);  // Call the function
         console.log(data);
@@ -81,6 +84,7 @@ const Profile = () => {
       }
     }
   };
+  console.log(profileData);
 
 
   return (
@@ -90,7 +94,7 @@ const Profile = () => {
           <div className="flex items-center gap-4">
             <Button 
               variant="ghost" 
-              onClick={() => navigate('/home')}
+              onClick={() => navigate('/')}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="h-4 w-4" />
