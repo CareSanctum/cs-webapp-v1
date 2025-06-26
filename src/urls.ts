@@ -6,7 +6,8 @@ const urls = {
     AUTH : '/api/_allauth/browser/v1/auth/session',
     TICKET_LIST : '/api/ticket-list/',
     STAFF_LIST : '/api/staff-list/',
-    RESIDENT_LIST : '/api/resident-list/'
+    RESIDENT_LIST : '/api/resident-list/',
+    SOCIETY_DETAILS : '/api/society-details/'
 
 }
 

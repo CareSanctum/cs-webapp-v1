@@ -45,5 +45,7 @@ export function useTicketList(params: TicketListParams) {
     return useQuery({
         queryKey: ['ticketList', params],
         queryFn: () => getTicketList(params),
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
     });
 }
