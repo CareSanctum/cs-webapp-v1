@@ -26,9 +26,9 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
     switch (status) {
       case "OPEN":
         return "from-red-50 to-red-100 border-red-200";
-      case "attending":
+      case "IN_PROGRESS":
         return "from-yellow-50 to-yellow-100 border-yellow-200";
-      case "attended":
+      case "CLOSED":
         return "from-green-50 to-green-100 border-green-200";
       default:
         return "from-gray-50 to-gray-100 border-gray-200";
@@ -38,15 +38,15 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
 
   const getIncidentIcon = (type: string) => {
     switch (type) {
-      case "sos":
+      case "PHYSICAL_SOS":
         return <AlertTriangle className="h-6 w-6 text-red-500" />;
-      case "fire_alarm":
+      case "WATCH_SOS":
         return <Flame className="h-6 w-6 text-orange-500" />;
-      case "smoke_detector":
+      case "SMOKE_DETECTED":
         return <Zap className="h-6 w-6 text-gray-500" />;
-      case "gas_leak":
+      case "GAS_LEAKAGE":
         return <Droplets className="h-6 w-6 text-yellow-500" />;
-      case "fall_detection":
+      case "FALL_DETECTED":
         return <Activity className="h-6 w-6 text-blue-500" />;
       default:
         return <AlertTriangle className="h-6 w-6 text-gray-500" />;
@@ -155,7 +155,7 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
                           incident.status
                         )} flex-shrink-0`}
                       >
-                        {incident.status}
+                        {(incident?.status || "").replace('_', ' ').toUpperCase()}
                       </Badge>
                       <ChevronRight className="h-5 w-5 text-gray-400 flex-shrink-0" />
                     </div>

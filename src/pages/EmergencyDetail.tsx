@@ -7,12 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { useTicketDetail } from "@/hooks/ticketDetail.hook";
+import { useTicketHistory } from "@/hooks/ticketHistory.hook";
+import axios from "axios";
 
 const getStatusColor = (status: string) => {
   switch (status) {
     case "OPEN": return "bg-red-100 text-red-700 border-red-200";
-    case "attending": return "bg-yellow-100 text-yellow-700 border-yellow-200";
-    case "attended": return "bg-green-100 text-green-700 border-green-200";
+    case "IN_PROGRESS": return "bg-yellow-100 text-yellow-700 border-yellow-200";
+    case "CLOSED": return "bg-green-100 text-green-700 border-green-200";
     default: return "bg-gray-100 text-gray-700 border-gray-200";
   }
 };
@@ -43,13 +45,9 @@ const EmergencyDetail = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const ticketId = id ? parseInt(id, 10) : undefined;
   const { data: incident, isLoading, error } = useTicketDetail(ticketId!);
-
-  // Dummy history for now (since not in API)
-  const history = [
-    { time: "10:20 AM", action: "Emergency alert triggered", user: "System" },
-    { time: "10:21 AM", action: "Alert sent to security team", user: "System" },
-    { time: "10:22 AM", action: "Security guard notified", user: "System" }
-  ];
+  const { data: history, status: historyStatus, error: historyError } = useTicketHistory(ticketId!);
+  const historyData = history?.history || [];
+  console.log(historyData);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -159,27 +157,47 @@ const EmergencyDetail = () => {
                 </Card>
 
                 {/* Action History */}
-                <Card className="shadow-sm border-0 bg-white/70 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle className="text-lg text-slate-800">Action History</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {history.map((entry, index) => (
-                        <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-slate-50/50">
-                          <div className="h-2 w-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-1">
-                              <p className="font-medium text-slate-800 text-sm">{entry.action}</p>
-                              <span className="text-xs text-slate-500">{entry.time}</span>
-                            </div>
-                            <p className="text-xs text-slate-600">by {entry.user}</p>
+                {(() => {
+                  // Check for 403 error using AxiosError
+                  let is403 = false;
+                  if (historyStatus === "error" && axios.isAxiosError(historyError) && historyError.response?.status === 403) {
+                    is403 = true;
+                  }
+                  if (is403) return null;
+                  return (
+                    <Card className="shadow-sm border-0 bg-white/70 backdrop-blur-sm">
+                      <CardHeader>
+                        <CardTitle className="text-lg text-slate-800">Action History</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        {historyStatus === "pending" ? (
+                          <div className="flex justify-center items-center min-h-[100px]">
+                            <span className="text-lg font-medium">Loading...</span>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                        ) : historyStatus === "error" ? (
+                          <div className="flex flex-col justify-center items-center min-h-[100px] text-red-600">
+                            <span className="text-lg font-medium">Failed to load ticket history.</span>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {historyData.map((entry, index) => (
+                              <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-slate-50/50">
+                                <div className="h-2 w-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <p className="font-medium text-slate-800 text-sm">{entry.description}</p>
+                                    <span className="text-xs text-slate-500">{new Date(entry.created_at).toLocaleTimeString()}</span>
+                                  </div>
+                                  <p className="text-xs text-slate-600">by System</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  );
+                })()}
               </>
             ) : null}
 

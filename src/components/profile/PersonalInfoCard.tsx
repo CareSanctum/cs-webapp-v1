@@ -22,11 +22,14 @@ interface PersonalInfoProps {
     consent_agreement: boolean;
   };
 }
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { ConsentDialogContent } from '@/ConsentDialogContent';
+import { Button } from '@/components/ui/button';
 
 export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
   const username = useAuthStore(state => state.username);
   const [profile_url, setprofile_url] = useState("");
-
+  const [consentOpen, setConsentOpen] = useState(false);
   const fetchprofilePicture = async () => {
     try {
       const data = await viewRequest(username);  // Call the function
@@ -101,7 +104,31 @@ export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
           </div>
           <div>
             <p className="text-sm text-gray-500">Consent Agreement</p>
-            <p className="font-medium">{personalInfo.consent_agreement ? "Agreed" : "Not Agreed"}</p>
+            <div className="flex items-center gap-4">
+              <p className="font-medium whitespace-nowrap">
+                {personalInfo.consent_agreement ? "Agreed" : "Not Agreed"}
+              </p>
+
+              <Dialog open={consentOpen} onOpenChange={setConsentOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="inline-block w-48 self-center text-center px-4 py-2"
+                  >
+                    Consent Agreement
+                  </Button>
+                </DialogTrigger>
+                <DialogContent
+                  className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-2xl w-full max-h-screen flex flex-col bg-white rounded-lg p-3"
+                  style={{ maxWidth: "600px", maxHeight: "600px" }}
+                >
+                  <div className="flex-1 overflow-y-auto p-6">
+                    <ConsentDialogContent />
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
         {/* <div className="mt-4 p-4 bg-gray-50 rounded-lg">
