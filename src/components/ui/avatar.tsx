@@ -24,9 +24,8 @@ const AvatarWithCamera = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
     handleFileUpload: (file: File) => void,
-    acceptedFileTypes?: string
   }
->(({ className, handleFileUpload, acceptedFileTypes = "image/*", ...props }, ref) => {
+>(({ className, handleFileUpload, ...props }, ref) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
@@ -53,7 +52,7 @@ const AvatarWithCamera = React.forwardRef<
       <input 
         id="avatar-upload" 
         type="file" 
-        accept={acceptedFileTypes}
+        
         onChange={handleChange}
         className="hidden" 
       />
