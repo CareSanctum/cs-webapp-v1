@@ -7,8 +7,8 @@ export type IncidentType =
 
 export type IncidentStatus = 
   | "OPEN" 
-  | "attending" 
-  | "attended";
+  | "IN_PROGRESS" 
+  | "CLOSED";
 
 export interface EmergencyIncident {
   id: string;

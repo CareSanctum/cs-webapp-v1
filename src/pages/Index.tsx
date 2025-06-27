@@ -26,7 +26,7 @@ const Index = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [isOverviewExpanded, setIsOverviewExpanded] = useState(true);
+  const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
   const isoString = selectedDate.toISOString()
   const username = useAuthStore(state => state.username)
   console.log(username);
@@ -72,8 +72,8 @@ const Index = () => {
   
   const stats = {
     yetToAttend: todayIncidents.filter(i => i.status === "OPEN").length,
-    attending: todayIncidents.filter(i => i.status === "attending").length,
-    attended: todayIncidents.filter(i => i.status === "attended").length,
+    attending: todayIncidents.filter(i => i.status === "IN_PROGRESS").length,
+    attended: todayIncidents.filter(i => i.status === "CLOSED").length,
     total: todayIncidents.length
   };
 

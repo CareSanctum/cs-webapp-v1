@@ -202,14 +202,14 @@ const EmergencyDetail = () => {
             ) : null}
 
             {/* Action Buttons */}
-            <div className="flex gap-3 mt-6">
+            {/* <div className="flex gap-3 mt-6">
               <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
                 Mark as Attending
               </Button>
               <Button variant="outline" className="flex-1 border-green-600 text-green-600 hover:bg-green-50">
                 Mark as Resolved
               </Button>
-            </div>
+            </div> */}
           </div>
         </main>
       </div>
