@@ -84,19 +84,3 @@ This is done solely in the interest of resident safety and well-being.
 * If consent is **not provided** (see below), and no NOK is reachable, **Care Sanctum and the Society will not initiate rescue** and the society will decide what needs to be done in that case. .
 
 ---
-
-### **📝 FINAL ACKNOWLEDGMENT**
-
-Please choose one of the following:
-
-**⬜ I GIVE CONSENT**  
- I, the undersigned resident, have read and understood the above, and I give my informed consent for participation in the Care Sanctum Hybrid Responder Model.
-
-**⬜I consent to all terms outlined above, excluding the break-in protocol**
-
-⚠️ *Note: If you do not provide consent, Care Sanctum and the Society will not intervene in SOS emergencies without NOK confirmation. In such events, a police report will be filed, and all further action will be under law enforcement.*
-
-✅ **\[I Give Consent\]** → Form submitted.
-
-❌ **\[I consent to all terms outlined above, excluding the break-in protocol**  
-**\]** 
