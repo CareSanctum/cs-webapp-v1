@@ -17,9 +17,9 @@ export interface EmergencyIncident {
   flatNumber: string;
   incidentType: IncidentType;
   nokPhone: string;
-  timestamp: Date;
+  created_at: Date;
+  closed_at: Date;
   status: IncidentStatus;
-  description?: string;
 }
 
 export interface Society {

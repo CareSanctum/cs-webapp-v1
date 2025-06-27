@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { LogOut, ArrowLeft } from 'lucide-react';
+import { LogOut, ArrowLeft, Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { PersonalInfoCard } from '@/components/profile/PersonalInfoCard';
@@ -18,17 +18,19 @@ const Profile = () => {
   
   const [userDetails, setUserDetails] = useState<any>(null);
   const username = useAuthStore(state => state.username);
+  const [dataloading, setdataloading] = useState(false);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
+        setdataloading(true);
         const data = await viewRequest(username);  // Call the function
-        console.log(data);
-        console.log(username);
         setUserDetails(data);
         console.log(userDetails) // Store response in the stat
+        setdataloading(false);
       } catch (error: any) {
         console.log(error);
+        setdataloading(false);
       }
     };
 
@@ -48,14 +50,15 @@ const Profile = () => {
       currentLocation: {
         status: userDetails?.patient?.current_location_status || "",
         expectedReturn: undefined
-      }
+      },
+      consent_agreement: userDetails?.patient?.type_specific_metadata?.consent_agreement || false,
     },
     contact: {
       phone: userDetails?.patient?.phone || "",
       altPhone: userDetails?.patient?.alternate_phone || "",
       email: userDetails?.patient?.email || "",
       address: userDetails?.patient?.address || "",
-      pincode: userDetails?.patient?.PINcode || "",
+      pincode: userDetails?.patient?.pin_code || "",
       idProofUrl: userDetails?.patient?.id_proof_url || "",
     },
     emergencyContact: {
@@ -88,6 +91,8 @@ const Profile = () => {
 
 
   return (
+    <>
+    {dataloading ? <div className="flex justify-center items-center min-h-screen"><Loader2 className="w-8 h-8 animate-spin" /></div> : (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -98,7 +103,7 @@ const Profile = () => {
               className="flex items-center gap-2"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              Back
             </Button>
             <h1 className="text-xl font-bold">Profile</h1>
           </div>
@@ -122,6 +127,8 @@ const Profile = () => {
 
       </main>
     </div>
+    )}
+    </>
   );
 };
 

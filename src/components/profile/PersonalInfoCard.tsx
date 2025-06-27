@@ -19,6 +19,7 @@ interface PersonalInfoProps {
       status: "home" | "travelling";
       expectedReturn?: string;
     };
+    consent_agreement: boolean;
   };
 }
 
@@ -76,7 +77,7 @@ export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div>
             <p className="text-sm text-gray-500">Date of Birth</p>
-            <p className="font-medium">{new Date(personalInfo.dob).toLocaleDateString()}</p>
+            <p className="font-medium">{personalInfo.dob ? new Date(personalInfo.dob).toLocaleDateString() : ''}</p>
           </div>
           <div>
             <p className="text-sm text-gray-500">Gender</p>
@@ -96,17 +97,21 @@ export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
           </div>
           <div>
             <p className="text-sm text-gray-500">Wake Up Time</p>
-            <p className="font-medium">{personalInfo.wakeUpTime || "6:00 AM"}</p>
+            <p className="font-medium">{personalInfo.wakeUpTime || ""}</p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Consent Agreement</p>
+            <p className="font-medium">{personalInfo.consent_agreement ? "Agreed" : "Not Agreed"}</p>
           </div>
         </div>
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+        {/* <div className="mt-4 p-4 bg-gray-50 rounded-lg">
           <p className="text-sm text-gray-500">Current Status</p>
           <p className="font-medium">
             {personalInfo.currentLocation.status === "home" 
               ? "At Home" 
               : `Travelling (Expected Return: ${personalInfo.currentLocation.expectedReturn})`}
           </p>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );

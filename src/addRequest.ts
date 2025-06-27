@@ -10,7 +10,7 @@ export const addReqeuest = async (userform: any, username: string) =>{
         height: userform.height,
         weight: userform.weight,
         usual_wake_up_time: userform.wakeUpTime,
-        current_location_status: userform.locationStatus,
+        email: userform.email,
         phone: userform.phone,
         alternate_phone: userform.altPhone,
         address: userform.address,

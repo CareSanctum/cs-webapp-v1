@@ -3,7 +3,7 @@ import { getCSRFToken } from "./utils";
 
 export const sendfileRequest = async (formData: FormData) => {
     try{
-        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/upload-file/`, formData, {
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/upload-file/`,formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'X-CSRFToken': getCSRFToken()

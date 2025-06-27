@@ -55,20 +55,20 @@ const Index = () => {
   const { data: ticketData, isLoading, error } = useTicketList(getApiParams());
 
   // Convert API tickets to EmergencyIncident format for compatibility
-  const incidents: EmergencyIncident[] = ticketData?.tickets?.map(ticket => ({
+  const incidents: EmergencyIncident[] = (ticketData?.tickets?.map(ticket => ({
     id: ticket.id?.toString() ?? '',
     residentName: ticket.user_initiated?.full_name ?? 'Unknown',
     phoneNumber: ticket.user_initiated?.phone_number ?? 'N/A',
-    flatNumber: 'N/A',
+    flatNumber: ticket.address ?? 'N/A',
     incidentType: (ticket.type?.code as IncidentType) ?? "PHSYICAL_SOS",
-    nokPhone: 'N/A',
-    timestamp: ticket.created_at ? new Date(ticket.created_at) : new Date(),
+    nokPhone: ticket.nok_contact ?? 'N/A',
+    created_at: ticket.created_at ? new Date(ticket.created_at) : new Date(),
+    closed_at: ticket.closed_at ? new Date(ticket.closed_at) : new Date(),
     status: (ticket.status as IncidentStatus) ?? "OPEN",
-    description: `${ticket.type?.name ?? 'Unknown'} - ${ticket.user_initiated?.full_name ?? ''}`,
-  })) || [];
+  })) || []).sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
 
   
-  const todayIncidents = incidents.filter(incident => incident.timestamp.toDateString() === new Date().toDateString());
+  const todayIncidents = incidents.filter(incident => incident.created_at.toDateString() === new Date().toDateString());
   
   const stats = {
     yetToAttend: todayIncidents.filter(i => i.status === "OPEN").length,

@@ -38,6 +38,7 @@ export const PersonalInfoSection = ({ register, watch, control }: { register: an
   };
   return (
     <div className="space-y-4">
+      
       <h3 className="text-lg font-semibold text-primary">Personal Information</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
@@ -56,17 +57,17 @@ export const PersonalInfoSection = ({ register, watch, control }: { register: an
           <Controller
             name="gender"
             control={control}
-            defaultValue="male"
+            defaultValue="Male"
             render={({ field }) => (
               <RadioGroup {...field} onValueChange={field.onChange}>
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="male" id="male" />
-                    <Label htmlFor="male">Male</Label>
+                    <RadioGroupItem value="Male" id="Male" />
+                    <Label htmlFor="Male">Male</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="female" id="female" />
-                    <Label htmlFor="female">Female</Label>
+                    <RadioGroupItem value="Female" id="Female" />
+                    <Label htmlFor="Female">Female</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="other" id="other" />
@@ -125,7 +126,7 @@ export const PersonalInfoSection = ({ register, watch, control }: { register: an
           <Label htmlFor="wakeUpTime">Usual Wake Up Time </Label>
           <Input id="wakeUpTime" type="time" {...register("wakeUpTime")}/>
         </div>
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label>Current Location Status </Label>
           <Controller
             name="locationStatus"
@@ -146,20 +147,7 @@ export const PersonalInfoSection = ({ register, watch, control }: { register: an
             </RadioGroup>
           )}
         />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="expectedReturn">
-            Expected Return Date
-            {locationStatus === 'travelling'}
-          </Label>
-          <Input 
-            id="expectedReturn" 
-            type="date" 
-            {...register("expectedReturn", { 
-              required: locationStatus === 'travelling' 
-            })} 
-          />
-        </div>
+        </div> */}
       </div>
     </div>
   );

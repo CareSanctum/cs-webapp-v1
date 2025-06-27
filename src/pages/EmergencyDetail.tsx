@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router";
 import { ArrowLeft, Phone, MapPin, Clock, User, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { DashboardHeader } from "@/components/DashboardHeader";
@@ -7,29 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-
-// Mock data - in real app this would come from API
-const mockIncidentDetail = {
-  id: "1",
-  residentName: "Mrs. Priya Sharma",
-  phoneNumber: "+91 9876543210",
-  flatNumber: "A-101",
-  incidentType: "sos",
-  nokPhone: "+91 9876543211",
-  timestamp: new Date("2025-06-21T10:20:00"),
-  status: "yet_to_attend",
-  description: "Emergency SOS button pressed in bedroom area",
-  address: "A-101, Golden Heights Residency, Sector 12, Gurgaon",
-  history: [
-    { time: "10:20 AM", action: "Emergency alert triggered", user: "System" },
-    { time: "10:21 AM", action: "Alert sent to security team", user: "System" },
-    { time: "10:22 AM", action: "Security guard notified", user: "System" }
-  ]
-};
+import { useTicketDetail } from "@/hooks/ticketDetail.hook";
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "yet_to_attend": return "bg-red-100 text-red-700 border-red-200";
+    case "OPEN": return "bg-red-100 text-red-700 border-red-200";
     case "attending": return "bg-yellow-100 text-yellow-700 border-yellow-200";
     case "attended": return "bg-green-100 text-green-700 border-green-200";
     default: return "bg-gray-100 text-gray-700 border-gray-200";
@@ -38,19 +19,37 @@ const getStatusColor = (status: string) => {
 
 const getIncidentTypeLabel = (type: string) => {
   switch (type) {
-    case "sos": return "SOS Emergency";
-    case "fire_alarm": return "Fire Alarm";
-    case "smoke_detector": return "Smoke Detected";
-    case "gas_leak": return "Gas Leak";
-    case "fall_detection": return "Fall Detected";
+    case "PHYSICAL_SOS": return "Physical SOS Alert";
+    case "WATCH_SOS": return "Watch SOS Alert";
+    case "SMOKE_DETECTED": return "Smoke Detected Alert";
+    case "GAS_LEAKAGE": return "Gas Leakage Alert";
+    case "FALL_DETECTED": return "Fall Detected";
     default: return type;
   }
 };
+const getIncidentTypedescription = (type: string) => {
+  switch (type) {
+    case "PHYSICAL_SOS": return "Emergency SOS button pressed";
+    case "WATCH_SOS": return "Watch SOS button pressed";
+    case "SMOKE_DETECTED": return "Smoke detected by the device";
+    case "GAS_LEAKAGE": return "Gas Leak detected by the device";
+    case "FALL_DETECTED": return "Fall detected by the device";
+    default: return `${type} Alert Occured`;
+  }
+}
 
 const EmergencyDetail = () => {
   const { id } = useParams();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const incident = mockIncidentDetail; // In real app, fetch by id
+  const ticketId = id ? parseInt(id, 10) : undefined;
+  const { data: incident, isLoading, error } = useTicketDetail(ticketId!);
+
+  // Dummy history for now (since not in API)
+  const history = [
+    { time: "10:20 AM", action: "Emergency alert triggered", user: "System" },
+    { time: "10:21 AM", action: "Alert sent to security team", user: "System" },
+    { time: "10:22 AM", action: "Security guard notified", user: "System" }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -84,89 +83,105 @@ const EmergencyDetail = () => {
                   Back to Dashboard
                 </Link>
               </Button>
-              <Badge className={`px-3 py-1 text-sm font-medium border ${getStatusColor(incident.status)}`}>
-                {incident.status.replace('_', ' ').toUpperCase()}
+              <Badge className={`px-3 py-1 text-sm font-medium border ${getStatusColor(incident?.status || "")}`}>
+                {(incident?.status || "").replace('_', ' ').toUpperCase()}
               </Badge>
             </div>
 
-            {/* Emergency Info Card */}
-            <Card className="mb-6 shadow-sm border-0 bg-white/70 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-xl text-slate-800 mb-2">{getIncidentTypeLabel(incident.incidentType)}</CardTitle>
-                    <p className="text-slate-600 text-sm">{incident.description}</p>
-                  </div>
-                  <AlertTriangle className="h-8 w-8 text-red-500" />
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3">
-                    <User className="h-5 w-5 text-slate-500" />
-                    <div>
-                      <p className="font-medium text-slate-800">{incident.residentName}</p>
-                      <p className="text-sm text-slate-600">Resident</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-slate-500" />
-                    <div>
-                      <p className="font-medium text-slate-800">{incident.flatNumber}</p>
-                      <p className="text-sm text-slate-600">{incident.address}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-slate-500" />
-                    <div>
-                      <p className="font-medium text-slate-800">{incident.phoneNumber}</p>
-                      <p className="text-sm text-slate-600">Primary Contact</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <Clock className="h-5 w-5 text-slate-500" />
-                    <div>
-                      <p className="font-medium text-slate-800">{incident.timestamp.toLocaleTimeString()}</p>
-                      <p className="text-sm text-slate-600">{incident.timestamp.toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="pt-4 border-t border-slate-200">
-                  <p className="text-sm text-slate-600 mb-2">Emergency Contact:</p>
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-slate-500" />
-                    <span className="font-medium text-slate-800">{incident.nokPhone}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Action History */}
-            <Card className="shadow-sm border-0 bg-white/70 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-lg text-slate-800">Action History</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {incident.history.map((entry, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-slate-50/50">
-                      <div className="h-2 w-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <p className="font-medium text-slate-800 text-sm">{entry.action}</p>
-                          <span className="text-xs text-slate-500">{entry.time}</span>
-                        </div>
-                        <p className="text-xs text-slate-600">by {entry.user}</p>
+            {/* Emergency Info Card & Action History - Loading/Error/Data */}
+            {isLoading ? (
+              <Card className="mb-6 shadow-sm border-0 bg-white/70 backdrop-blur-sm">
+                <CardContent className="flex justify-center items-center min-h-[200px]">
+                  <span className="text-lg font-medium">Loading...</span>
+                </CardContent>
+              </Card>
+            ) : error ? (
+              <Card className="mb-6 shadow-sm border-0 bg-white/70 backdrop-blur-sm">
+                <CardContent className="flex flex-col justify-center items-center min-h-[200px] text-red-600">
+                  <span className="text-lg font-medium">Failed to load incident details.</span>
+                </CardContent>
+              </Card>
+            ) : incident ? (
+              <>
+                {/* Emergency Info Card */}
+                <Card className="mb-6 shadow-sm border-0 bg-white/70 backdrop-blur-sm">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="text-xl text-slate-800 mb-2">{getIncidentTypeLabel(incident.type)}</CardTitle>
+                        <p className="text-slate-600 text-sm">{getIncidentTypedescription(incident.type)}</p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex items-center gap-3">
+                        <User className="h-5 w-5 text-slate-500" />
+                        <div>
+                          <p className="font-medium text-slate-800">{incident.user_initiated?.full_name}</p>
+                          <p className="text-sm text-slate-600">Resident</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <MapPin className="h-5 w-5 text-slate-500" />
+                        <div>
+                          <p className="font-medium text-slate-800">{incident.user_address}</p>
+                          {/* <p className="text-sm text-slate-600">{incident.address}</p> */}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <Phone className="h-5 w-5 text-slate-500" />
+                        <div>
+                          <p className="font-medium text-slate-800">{incident.user_initiated?.phone_number}</p>
+                          <p className="text-sm text-slate-600">Primary Contact</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <Clock className="h-5 w-5 text-slate-500" />
+                        <div>
+                          <p className="font-medium text-slate-800">{new Date(incident.created_at).toLocaleTimeString()}</p>
+                          <p className="text-sm text-slate-600">{new Date(incident.created_at).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-4 border-t border-slate-200">
+                      <p className="text-sm text-slate-600 mb-2">Emergency Contact:</p>
+                      <div className="flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-slate-500" />
+                        <span className="font-medium text-slate-800">{incident.nok_contact}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Action History */}
+                <Card className="shadow-sm border-0 bg-white/70 backdrop-blur-sm">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-slate-800">Action History</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {history.map((entry, index) => (
+                        <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-slate-50/50">
+                          <div className="h-2 w-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-1">
+                              <p className="font-medium text-slate-800 text-sm">{entry.action}</p>
+                              <span className="text-xs text-slate-500">{entry.time}</span>
+                            </div>
+                            <p className="text-xs text-slate-600">by {entry.user}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            ) : null}
 
             {/* Action Buttons */}
             <div className="flex gap-3 mt-6">

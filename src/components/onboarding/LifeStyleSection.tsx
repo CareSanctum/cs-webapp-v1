@@ -37,7 +37,6 @@ export const LifestyleSection = ({ register, control }: { register: any, control
                   <SelectItem value="vegetarian">Vegetarian</SelectItem>
                   <SelectItem value="non-vegetarian">Non-Vegetarian</SelectItem>
                   <SelectItem value="vegan">Vegan</SelectItem>
-                  <SelectItem value="diabetic">Diabetic Diet</SelectItem>
                 </SelectContent>
               </Select>
             )}

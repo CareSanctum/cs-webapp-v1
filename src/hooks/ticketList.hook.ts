@@ -24,6 +24,8 @@ export interface Ticket {
     status: string
     created_at: string;
     closed_at?: string;
+    nok_contact?: string;
+    address?: string;
 }
 interface TicketListResponse {
     tickets: Ticket[];
