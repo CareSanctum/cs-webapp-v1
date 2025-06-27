@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Camera } from 'lucide-react';
+import { User, Camera, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback, AvatarWithCamera } from "@/components/ui/avatar";
 import { sendfileRequest } from '@/sendfileRequest';
@@ -25,11 +25,15 @@ interface PersonalInfoProps {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ConsentDialogContent } from '@/ConsentDialogContent';
 import { Button } from '@/components/ui/button';
+import { useUploadFile } from '@/hooks/uploadFile.hook';
+import { useToast } from '@/hooks/use-toast';
 
 export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
   const username = useAuthStore(state => state.username);
   const [profile_url, setprofile_url] = useState("");
   const [consentOpen, setConsentOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const {toast} = useToast();
   const fetchprofilePicture = async () => {
     try {
       const data = await viewRequest(username);  // Call the function
@@ -47,6 +51,7 @@ export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
     formData.append("user_name", username);
     try {
       // ✅ Show a loading state (optional)
+      setLoading(true);
       setprofile_url("");  
   
       // ✅ Upload file to the backend first
@@ -54,10 +59,21 @@ export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
   
       // ✅ Only update profile_url after getting a successful response
       fetchprofilePicture();
+      setLoading(false);
+      toast({
+        title: "File uploaded successfully",
+        description: "Your file has been uploaded successfully",
+        variant: "success",
+      });
     } catch (error) {
       console.error("Upload failed:", error);
       // ❌ Show an error message (optional)
-      alert("Failed to upload profile picture. Please try again.");
+      setLoading(false);
+      toast({
+        title: "File upload failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
     }
   }
   useEffect(() => {
@@ -67,12 +83,18 @@ export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
     <Card>
       <CardHeader className="text-center">
         <div className="mx-auto mb-4">
-          <AvatarWithCamera className="h-32 w-32" handleFileUpload={handleFileUpload}>
-            <AvatarImage src={profile_url} alt={personalInfo.fullName} />
-            <AvatarFallback>
-              <User className="h-16 w-16" />
-            </AvatarFallback>
-          </AvatarWithCamera>
+          {loading ? (
+            <div className="h-32 w-32 rounded-full bg-gray-100 flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+            </div>
+          ) : (
+            <AvatarWithCamera className="h-32 w-32" handleFileUpload={handleFileUpload}>
+              <AvatarImage src={profile_url} alt={personalInfo.fullName} />
+              <AvatarFallback>
+                <User className="h-16 w-16" />
+              </AvatarFallback>
+            </AvatarWithCamera>
+          )}
         </div>
         <CardTitle className="text-2xl">{personalInfo.fullName}</CardTitle>
       </CardHeader>

@@ -51,12 +51,14 @@ type FormData = {
 export const OnboardingForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { register, handleSubmit, watch, control, getValues, reset} = useForm();
+  const { register, handleSubmit, watch, control, getValues, reset, setValue} = useForm();
   const [userDetails, setUserDetails] = useState<FormData | null>(null);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [dataloading, setdataloading] = useState(false);
   const [consentOpen, setConsentOpen] = useState(false);
   const [consent, setConsent] = useState<"agree" | "disagree" | null>(null);
+  const [disagreeDialogOpen, setDisagreeDialogOpen] = useState(false);
+  const [disagreeConfirmation, setDisagreeConfirmation] = useState<"confirm" | "cancel" | null>(null);
   
   const username = useAuthStore(state => state.username);
 
@@ -111,6 +113,7 @@ export const OnboardingForm = () => {
   const onSubmit = async (data: any) => {
     const values = getValues();
     console.log(values);
+    values['disagree_breakin'] = disagreeConfirmation === "confirm" ? true : false;
     try{
       setSubmitLoading(true);
       const response = await addReqeuest(values, username);
@@ -136,6 +139,35 @@ export const OnboardingForm = () => {
     }
   };
 
+  const handleConsentChange = (value: boolean) => {
+    if (value === true) {
+      // User agrees - proceed normally
+      setConsent("agree");
+      setValue("consent_agreement", true);
+      setDisagreeDialogOpen(false);
+      setDisagreeConfirmation(null);
+    } else {
+      // User disagrees - show confirmation dialog
+      setConsent("disagree");
+      setValue("consent_agreement", false);
+      setDisagreeDialogOpen(true);
+    }
+  };
+
+  const handleDisagreeConfirmation = (action: "confirm" | "cancel") => {
+    if (action === "cancel") {
+      // User cancels - change back to agree
+      setConsent("agree");
+      setValue("consent_agreement", true);
+      setDisagreeDialogOpen(false);
+      setDisagreeConfirmation(null);
+    } else {
+      // User confirms - store the disagree value
+      setDisagreeConfirmation("confirm");
+      setDisagreeDialogOpen(false);
+    }
+  };
+
   return (
     <>
       {/* Consent Form Modal */}
@@ -156,6 +188,33 @@ export const OnboardingForm = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Disagree Confirmation Dialog */}
+      <Dialog open={disagreeDialogOpen} onOpenChange={setDisagreeDialogOpen}>
+        <DialogContent className="max-w-md">
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Confirm Decision</h3>
+            <p className="text-sm text-gray-600">
+              By declining consent, you acknowledge that neither Care Sanctum nor your society is authorized to take emergency rescue action in the absence of your NOK. In such cases, the SOS alert will only be escalated to the police. Are you sure you want to proceed without giving consent?
+            </p>
+            <div className="flex gap-3 pt-4">
+              <Button 
+                variant="outline" 
+                onClick={() => handleDisagreeConfirmation("cancel")}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={() => handleDisagreeConfirmation("confirm")}
+                className="flex-1"
+              >
+                Yes, proceed
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Consent Checkboxes */}
       <div className="flex flex-col items-center gap-4 mb-6">
         <Controller
@@ -168,18 +227,17 @@ export const OnboardingForm = () => {
                 <input
                   type="radio"
                   checked={field.value === true}
-                  
-                  onChange={() => field.onChange(true)}
+                  onChange={() => handleConsentChange(true)}
                 />
-                I agree
+                Give Consent
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
                   checked={field.value === false}
-                  onChange={() => field.onChange(false)}
+                  onChange={() => handleConsentChange(false)}
                 />
-                I disagree
+                Give Consent except for Breakin
               </label>
             </div>
           )}

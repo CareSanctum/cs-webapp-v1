@@ -7,33 +7,46 @@ import { Controller } from 'react-hook-form';
 import { useState } from 'react';
 import { useAuthStore } from '@/store/AuthStore';
 import { sendfileRequest } from '@/sendfileRequest';
+import { useUploadFile } from '@/hooks/uploadFile.hook';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 export const PersonalInfoSection = ({ register, watch, control }: { register: any, watch: any, control: any }) => {
   const locationStatus = watch('locationStatus');
   const username = useAuthStore(state => state.username);
   const [file, setFile] = useState<File | null>(null);
+  const {toast} = useToast();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]); // Save the file in state
     }
   };
+  const { mutate: uploadFile, status } = useUploadFile();
 
   const handlefileUpload = async () => {
-    if (!file) {
-      alert("Please select a file first.");
-      return;
-    }
-
-    // Create a FormData object
     const sanitizedFileName = file.name.replace(/\s+/g, "_"); 
     const formData = new FormData();
     formData.append("file", new File([file], sanitizedFileName, { type: file.type })); // Append the file with a field name "file"
     formData.append("name", "id_proof");
     formData.append("user_name", username);
-
-    //Sending via Axios
-    sendfileRequest(formData);
+    uploadFile(formData, {
+      onSuccess: () => {
+        toast({
+          title: "File uploaded successfully",
+          description: "Your file has been uploaded successfully",
+          variant: "success",
+        });
+        setFile(null);
+      },
+      onError: () => {
+        toast({
+          title: "File upload failed",
+          description: "Please try again",
+          variant: "destructive",
+        });
+      }
+    });
   
   };
   return (
@@ -116,11 +129,18 @@ export const PersonalInfoSection = ({ register, watch, control }: { register: an
           className= "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
           id="idProof" type="file"  onChange={handleFileChange} accept=".pdf,.jpg,.jpeg,.png" />
           <div className="flex justify-center">
-          <button onClick={handlefileUpload}
-          disabled={!file}
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-gray-400"
-          >Upload</button>
-          </div>
+              <button
+                type="button"
+                onClick={e => {
+                  e.preventDefault()
+                  handlefileUpload()
+                }}
+                disabled={!file || status === "pending"}
+                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-gray-400"
+              >
+                {status === "pending" ? <Loader2 className="animate-spin" /> : "Upload"}
+              </button>
+            </div>  
         </div>
         <div className="space-y-2">
           <Label htmlFor="wakeUpTime">Usual Wake Up Time </Label>

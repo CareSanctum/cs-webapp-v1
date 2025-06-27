@@ -15,6 +15,8 @@ export const addReqeuest = async (userform: any, username: string) =>{
         alternate_phone: userform.altPhone,
         address: userform.address,
         pin_code: userform.pincode,
+        consent_agreement: userform.consent_agreement,
+        disagree_breakin: userform.disagree_breakin,
       }).filter(([_, value]) => value !== null && value !== "") // Remove empty/null fields
     );    
     const emergencyContacts = Object.fromEntries(
