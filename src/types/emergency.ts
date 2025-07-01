@@ -7,7 +7,11 @@ export type IncidentType =
 
 export type IncidentStatus = 
   | "OPEN" 
-  | "IN_PROGRESS" 
+  | "ATTENDING"
+  | "VALIDATED"
+  | "INVALID"
+  | "CORDINATION_REQUIRED"
+  | "NO_CORDINATION_REQUIRED"
   | "CLOSED";
 
 export interface EmergencyIncident {
