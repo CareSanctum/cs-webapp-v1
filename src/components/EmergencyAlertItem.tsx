@@ -13,9 +13,13 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
     switch (status) {
       case "OPEN":
         return "bg-gray-100 text-red-700 border-red-500";
-      case "attending":
+      case "ATTENDING":
+      case "VALIDATED":
+      case "INVALID":
+      case "CORDINATION_REQUIRED":
+      case "NO_CORDINATION_REQUIRED":
         return "bg-gray-100 text-yellow-700 border-yellow-500";
-      case "attended":
+      case "CLOSED":
         return "bg-gray-100 text-green-700 border-green-500";
       default:
         return "bg-gray-100 text-gray-600 border-gray-500";
@@ -26,7 +30,11 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
     switch (status) {
       case "OPEN":
         return "from-red-50 to-red-100 border-red-200";
-      case "IN_PROGRESS":
+      case "ATTENDING":
+      case "VALIDATED":
+      case "INVALID":
+      case "CORDINATION_REQUIRED":
+      case "NO_CORDINATION_REQUIRED":
         return "from-yellow-50 to-yellow-100 border-yellow-200";
       case "CLOSED":
         return "from-green-50 to-green-100 border-green-200";

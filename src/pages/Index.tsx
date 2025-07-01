@@ -72,7 +72,7 @@ const Index = () => {
   
   const stats = {
     yetToAttend: todayIncidents.filter(i => i.status === "OPEN").length,
-    attending: todayIncidents.filter(i => i.status === "IN_PROGRESS").length,
+    attending: todayIncidents.filter(i => i.status !== "OPEN" && i.status !== "CLOSED").length,
     attended: todayIncidents.filter(i => i.status === "CLOSED").length,
     total: todayIncidents.length
   };

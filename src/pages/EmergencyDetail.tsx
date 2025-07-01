@@ -13,7 +13,12 @@ import axios from "axios";
 const getStatusColor = (status: string) => {
   switch (status) {
     case "OPEN": return "bg-red-100 text-red-700 border-red-200";
-    case "IN_PROGRESS": return "bg-yellow-100 text-yellow-700 border-yellow-200";
+    case "ATTENDING":
+    case "VALIDATED":
+    case "INVALID":
+    case "CORDINATION_REQUIRED":
+    case "NO_CORDINATION_REQUIRED":
+      return "bg-yellow-100 text-yellow-700 border-yellow-200";
     case "CLOSED": return "bg-green-100 text-green-700 border-green-200";
     default: return "bg-gray-100 text-gray-700 border-gray-200";
   }

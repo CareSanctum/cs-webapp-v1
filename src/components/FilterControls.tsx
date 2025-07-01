@@ -87,9 +87,13 @@ export const FilterControls = ({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="yet_to_attend">Urgent</SelectItem>
-                    <SelectItem value="attending">In Progress</SelectItem>
-                    <SelectItem value="attended">Resolved</SelectItem>
+                    <SelectItem value="OPEN">Open</SelectItem>
+                    <SelectItem value="ATTENDING">Attending</SelectItem>
+                    <SelectItem value="VALIDATED">Validated</SelectItem>
+                    <SelectItem value="INVALID">Invalid</SelectItem>
+                    <SelectItem value="CORDINATION_REQUIRED">Coordination Required</SelectItem>
+                    <SelectItem value="NO_CORDINATION_REQUIRED">No Coordination Required</SelectItem>
+                    <SelectItem value="CLOSED">Closed</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -151,9 +155,13 @@ export const FilterControls = ({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="yet_to_attend">Urgent</SelectItem>
-                    <SelectItem value="attending">In Progress</SelectItem>
-                    <SelectItem value="attended">Resolved</SelectItem>
+                    <SelectItem value="OPEN">Open</SelectItem>
+                    <SelectItem value="ATTENDING">Attending</SelectItem>
+                    <SelectItem value="VALIDATED">Validated</SelectItem>
+                    <SelectItem value="INVALID">Invalid</SelectItem>
+                    <SelectItem value="CORDINATION_REQUIRED">Coordination Required</SelectItem>
+                    <SelectItem value="NO_CORDINATION_REQUIRED">No Coordination Required</SelectItem>
+                    <SelectItem value="CLOSED">Closed</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
