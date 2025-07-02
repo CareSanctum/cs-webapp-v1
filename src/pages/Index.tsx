@@ -174,6 +174,11 @@ const Index = () => {
                 onDateChange={handleDateChange}
                 showFilters={showFilters}
                 onToggleFilters={() => setShowFilters(!showFilters)}
+                onClearFilters={() => {
+                  setStatusFilter("all");
+                  setTypeFilter("all");
+                  setSelectedDate(new Date());
+                }}
               />
               
               {/* Desktop Section Title */}

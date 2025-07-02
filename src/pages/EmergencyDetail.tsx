@@ -13,7 +13,7 @@ import axios from "axios";
 const getStatusColor = (status: string) => {
   switch (status) {
     case "OPEN": return "bg-red-100 text-red-700 border-red-200";
-    case "ATTENDING":
+    case "ASSIGNED":
     case "VALIDATED":
     case "INVALID":
     case "CORDINATION_REQUIRED":
@@ -23,6 +23,27 @@ const getStatusColor = (status: string) => {
     default: return "bg-gray-100 text-gray-700 border-gray-200";
   }
 };
+
+const getBadgeText = (status: string) => {
+  switch (status) {
+    case "OPEN":
+      return "Open";
+    case "ASSIGNED":
+      return "Assigned";
+    case "VALIDATED":
+      return "Validated";
+    case "INVALID":
+      return "Invalid";
+    case "CORDINATION_REQUIRED":
+      return "Follow Up";
+    case "NO_CORDINATION_REQUIRED":
+      return "No Follow Up";
+    case "CLOSED":
+      return "Closed";
+    default:
+      return status;
+  }
+}
 
 const getIncidentTypeLabel = (type: string) => {
   switch (type) {
@@ -87,7 +108,7 @@ const EmergencyDetail = () => {
                 </Link>
               </Button>
               <Badge className={`px-3 py-1 text-sm font-medium border ${getStatusColor(incident?.status || "")}`}>
-                {(incident?.status || "").replace('_', ' ').toUpperCase()}
+                {getBadgeText(incident?.status || "")}
               </Badge>
             </div>
 

@@ -13,7 +13,7 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
     switch (status) {
       case "OPEN":
         return "bg-gray-100 text-red-700 border-red-500";
-      case "ATTENDING":
+      case "ASSIGNED":
       case "VALIDATED":
       case "INVALID":
       case "CORDINATION_REQUIRED":
@@ -25,12 +25,31 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
         return "bg-gray-100 text-gray-600 border-gray-500";
     }
   };
-
+ const getBadgeText = (status: string) => {
+  switch (status) {
+    case "OPEN":
+      return "Open";
+    case "ASSIGNED":
+      return "Assigned";
+    case "VALIDATED":
+      return "Validated";
+    case "INVALID":
+      return "Invalid";
+    case "CORDINATION_REQUIRED":
+      return "Follow Up";
+    case "NO_CORDINATION_REQUIRED":
+      return "No Follow Up";
+    case "CLOSED":
+      return "Closed";
+    default:
+      return status;
+  }
+}
   const getStatusBackground = (status: string) => {
     switch (status) {
       case "OPEN":
         return "from-red-50 to-red-100 border-red-200";
-      case "ATTENDING":
+      case "ASSIGNED":
       case "VALIDATED":
       case "INVALID":
       case "CORDINATION_REQUIRED":
@@ -163,7 +182,7 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
                           incident.status
                         )} flex-shrink-0`}
                       >
-                        {(incident?.status || "").replace('_', ' ').toUpperCase()}
+                        {getBadgeText(incident?.status || "")}
                       </Badge>
                       <ChevronRight className="h-5 w-5 text-gray-400 flex-shrink-0" />
                     </div>
