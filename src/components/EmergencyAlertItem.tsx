@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmergencyIncident } from "@/types/emergency";
 import { AlertTriangle, Clock, MapPin, User, ChevronRight, Flame, Zap, Droplets, Activity } from "lucide-react";
+import { useTicketDetail } from "@/hooks/ticketDetail.hook";
+import axios from "axios";
 
 interface EmergencyAlertItemProps {
   incident: EmergencyIncident;
@@ -143,6 +145,18 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
     }
   };
 
+  // Ensure incident.id is a number for the hook
+  const ticketId = typeof incident.id === 'string' ? parseInt(incident.id, 10) : incident.id;
+  const { status: detailStatus, error: detailError } = useTicketDetail(ticketId);
+  let isUnauthorized = false;
+  if (
+    detailStatus === "error" &&
+    axios.isAxiosError(detailError) &&
+    detailError.response?.status === 403
+  ) {
+    isUnauthorized = true;
+  }
+
   return (
     <Card
       className={`shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer bg-gradient-to-r ${getStatusBackground(
@@ -150,98 +164,193 @@ export const EmergencyAlertItem = ({ incident }: EmergencyAlertItemProps) => {
       )} border-l-4 ${getTypeBorderColor(incident.incidentType)}`}
     >
       <CardContent className="p-0">
-        <Link to={`/emergency/${incident.id}`} className="block">
-          <div className="p-4">
-            {/* icon + header */}
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-3 flex-1 min-w-0">
-                <div
-                  className={`flex-shrink-0 p-2 rounded-lg shadow-sm ${getTypeBgColor(
-                    incident.incidentType
-                  )}`}
-                >
-                  {getIncidentIcon(incident.incidentType)}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-base text-gray-900 truncate">
-                        {getIncidentTypeLabel(incident.incidentType)}
-                      </h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="flex items-center gap-1 text-sm text-gray-600">
-                          <Clock className="h-4 w-4" />
-                          <span>{formatTime(incident.created_at)}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge
-                        className={`px-3 py-1 text-sm font-medium border ${getStatusColor(
-                          incident.status
-                        )} flex-shrink-0`}
-                      >
-                        {getBadgeText(incident?.status || "")}
-                      </Badge>
-                      <ChevronRight className="h-5 w-5 text-gray-400 flex-shrink-0" />
-                    </div>
+        {isUnauthorized ? (
+          <div className="block">
+            <div className="p-4">
+              {/* icon + header */}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  <div
+                    className={`flex-shrink-0 p-2 rounded-lg shadow-sm ${getTypeBgColor(
+                      incident.incidentType
+                    )}`}
+                  >
+                    {getIncidentIcon(incident.incidentType)}
                   </div>
 
-                  {/* Details on desktop */}
-                  <div className="hidden md:grid grid-cols-2 gap-x-2 gap-y-1 mb-2">
-                    <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
-                      <User className="h-5 w-5 text-gray-500 flex-shrink-0" />
-                      <span className="font-medium truncate">
-                        {incident.residentName}
-                      </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-base text-gray-900 truncate">
+                          {getIncidentTypeLabel(incident.incidentType)}
+                        </h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="flex items-center gap-1 text-sm text-gray-600">
+                            <Clock className="h-4 w-4" />
+                            <span>{formatTime(incident.created_at)}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          className={`px-3 py-1 text-sm font-medium border ${getStatusColor(
+                            incident.status
+                          )} flex-shrink-0`}
+                        >
+                          {getBadgeText(incident?.status || "")}
+                        </Badge>
+                        {/* No ChevronRight icon if unauthorized */}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
-                      <MapPin className="h-5 w-5 text-gray-500 flex-shrink-0" />
-                      <span className="font-medium truncate">
-                        {incident.flatNumber}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
-                      <span className="font-medium">Phone:</span>
-                      <span className="truncate">{incident.phoneNumber}</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
-                      <span className="font-medium">Emergency:</span>
-                      <span className="truncate">{incident.nokPhone}</span>
+
+                    {/* Details on desktop */}
+                    <div className="hidden md:grid grid-cols-2 gap-x-2 gap-y-1 mb-2">
+                      <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
+                        <User className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                        <span className="font-medium truncate">
+                          {incident.residentName}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
+                        <MapPin className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                        <span className="font-medium truncate">
+                          {incident.flatNumber}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
+                        <span className="font-medium">Phone:</span>
+                        <span className="truncate">{incident.phoneNumber}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
+                        <span className="font-medium">Emergency:</span>
+                        <span className="truncate">{incident.nokPhone}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Details on mobile (full-width) */}
-            <div className="mt-3 block md:hidden">
-              <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-                <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
-                  <User className="h-5 w-5 text-gray-500 flex-shrink-0" />
-                  <span className="font-medium truncate">
-                    {incident.residentName}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
-                  <MapPin className="h-5 w-5 text-gray-500 flex-shrink-0" />
-                  <span className="font-medium truncate">
-                    {incident.flatNumber}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
-                  <span className="font-medium">Phone:</span>
-                  <span className="truncate">{incident.phoneNumber}</span>
-                </div>
-                <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
-                  <span className="font-medium">Emergency</span>
-                  <span className="truncate">{incident.nokPhone}</span>
+              {/* Details on mobile (full-width) */}
+              <div className="mt-3 block md:hidden">
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                  <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
+                    <User className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                    <span className="font-medium truncate">
+                      {incident.residentName}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
+                    <MapPin className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                    <span className="font-medium truncate">
+                      {incident.flatNumber}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
+                    <span className="font-medium">Phone:</span>
+                    <span className="truncate">{incident.phoneNumber}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
+                    <span className="font-medium">Emergency</span>
+                    <span className="truncate">{incident.nokPhone}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </Link>
+        ) : (
+          <Link to={`/emergency/${incident.id}`} className="block">
+            <div className="p-4">
+              {/* icon + header */}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  <div
+                    className={`flex-shrink-0 p-2 rounded-lg shadow-sm ${getTypeBgColor(
+                      incident.incidentType
+                    )}`}
+                  >
+                    {getIncidentIcon(incident.incidentType)}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-base text-gray-900 truncate">
+                          {getIncidentTypeLabel(incident.incidentType)}
+                        </h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="flex items-center gap-1 text-sm text-gray-600">
+                            <Clock className="h-4 w-4" />
+                            <span>{formatTime(incident.created_at)}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          className={`px-3 py-1 text-sm font-medium border ${getStatusColor(
+                            incident.status
+                          )} flex-shrink-0`}
+                        >
+                          {getBadgeText(incident?.status || "")}
+                        </Badge>
+                        <ChevronRight className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                      </div>
+                    </div>
+
+                    {/* Details on desktop */}
+                    <div className="hidden md:grid grid-cols-2 gap-x-2 gap-y-1 mb-2">
+                      <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
+                        <User className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                        <span className="font-medium truncate">
+                          {incident.residentName}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
+                        <MapPin className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                        <span className="font-medium truncate">
+                          {incident.flatNumber}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
+                        <span className="font-medium">Phone:</span>
+                        <span className="truncate">{incident.phoneNumber}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
+                        <span className="font-medium">Emergency:</span>
+                        <span className="truncate">{incident.nokPhone}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Details on mobile (full-width) */}
+              <div className="mt-3 block md:hidden">
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                  <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
+                    <User className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                    <span className="font-medium truncate">
+                      {incident.residentName}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-700 truncate mb-2">
+                    <MapPin className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                    <span className="font-medium truncate">
+                      {incident.flatNumber}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
+                    <span className="font-medium">Phone:</span>
+                    <span className="truncate">{incident.phoneNumber}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-600 truncate">
+                    <span className="font-medium">Emergency</span>
+                    <span className="truncate">{incident.nokPhone}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        )}
       </CardContent>
     </Card>
   );
