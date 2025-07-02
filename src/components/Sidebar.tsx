@@ -59,10 +59,6 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       ? [{ icon: Briefcase, label: "Staff", href: "/staff", description: "Directory" }]
       : []
     ),
-    ... ( residentListstatus === 'success' 
-      ? [{ icon: Users, label: "Residents", href: "/residents", description: "Directory"}]
-      : []
-    ),
     {
       icon: Building2,
       label: "Society",

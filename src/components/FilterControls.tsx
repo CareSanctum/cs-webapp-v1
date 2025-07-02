@@ -18,6 +18,7 @@ interface FilterControlsProps {
   onDateChange: (date: Date | undefined) => void;
   showFilters: boolean;
   onToggleFilters: () => void;
+  onClearFilters: () => void;
 }
 
 export const FilterControls = ({
@@ -28,7 +29,8 @@ export const FilterControls = ({
   onTypeChange,
   onDateChange,
   showFilters,
-  onToggleFilters
+  onToggleFilters,
+  onClearFilters
 }: FilterControlsProps) => {
   const [isDesktopDatePickerOpen, setIsDesktopDatePickerOpen] = useState(false);
   const [isMobileDatePickerOpen, setIsMobileDatePickerOpen] = useState(false);
@@ -58,21 +60,36 @@ export const FilterControls = ({
       {/* Filter Toggle Button (Mobile) */}
       <div className="flex items-center justify-between lg:hidden">
         <h3 className="text-base font-medium text-gray-900">Emergency Alerts</h3>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={onToggleFilters}
-          className="flex items-center gap-2"
-        >
-          <Filter className="h-4 w-4" />
-          Filters
-          {activeFiltersCount > 0 && (
-            <span className="h-5 w-5 rounded-full bg-blue-100 text-blue-600 text-xs font-medium flex items-center justify-center">
-              {activeFiltersCount}
-            </span>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onToggleFilters}
+            className="flex items-center gap-2"
+          >
+            <Filter className="h-4 w-4" />
+            Filters
+            {activeFiltersCount > 0 && (
+              <span className="h-5 w-5 rounded-full bg-blue-100 text-blue-600 text-xs font-medium flex items-center justify-center">
+                {activeFiltersCount}
+              </span>
+            )}
+          </Button>
+          {showFilters && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                onClearFilters();
+                onToggleFilters();
+              }}
+              className="p-2"
+              title="Clear all filters"
+            >
+              <X className="h-4 w-4" />
+            </Button>
           )}
-          {showFilters && <X className="h-4 w-4" />}
-        </Button>
+        </div>
       </div>
 
       {/* Desktop Filters - Always Visible */}
@@ -88,7 +105,7 @@ export const FilterControls = ({
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="OPEN">Open</SelectItem>
-                    <SelectItem value="ATTENDING">Attending</SelectItem>
+                    <SelectItem value="ASSIGNED">Assigned</SelectItem>
                     <SelectItem value="VALIDATED">Validated</SelectItem>
                     <SelectItem value="INVALID">Invalid</SelectItem>
                     <SelectItem value="CORDINATION_REQUIRED">Coordination Required</SelectItem>
@@ -156,7 +173,7 @@ export const FilterControls = ({
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="OPEN">Open</SelectItem>
-                    <SelectItem value="ATTENDING">Attending</SelectItem>
+                    <SelectItem value="ASSIGNED">Assigned</SelectItem>
                     <SelectItem value="VALIDATED">Validated</SelectItem>
                     <SelectItem value="INVALID">Invalid</SelectItem>
                     <SelectItem value="CORDINATION_REQUIRED">Coordination Required</SelectItem>

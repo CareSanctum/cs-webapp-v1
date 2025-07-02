@@ -45,10 +45,13 @@ async function getTicketList(params: TicketListParams): Promise<TicketListRespon
 }
 
 export function useTicketList(params: TicketListParams) {
+    const isProd = process.env.NODE_ENV === 'production';
     return useQuery({
         queryKey: ['ticketList', params],
         queryFn: () => getTicketList(params),
         refetchOnWindowFocus: true,
         refetchOnReconnect: true,
+        refetchInterval: isProd ? 10000 : false,
+        refetchIntervalInBackground: isProd,
     });
 }
