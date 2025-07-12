@@ -7,7 +7,11 @@ const urls = {
     TICKET_LIST : '/api/ticket-list/',
     STAFF_LIST : '/api/staff-list/',
     RESIDENT_LIST : '/api/resident-list/',
-    SOCIETY_DETAILS : '/api/society-details/'
+    SOCIETY_DETAILS : '/api/society-details/',
+    SESSION_EXPIRY: '/api/session-expiry',
+    CONSENT_STATUS: '/api/consent-status/',
+    CONSENT_UPDATE: '/api/consent/',
+    CONSENT_LIST: '/api/consent-list/'
 
 }
 

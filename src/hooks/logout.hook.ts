@@ -31,9 +31,15 @@ export function useLogout() {
     return useMutation({
         mutationFn: logout,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['authStatus'] });
+            // Clear all auth-related queries from cache
+            queryClient.removeQueries({ queryKey: ['authStatus'] });
+            queryClient.removeQueries({ queryKey: ['consent-status'] });
+            
+            // Clear username from store
             clearusername();
-            navigate('/login');
+            
+            // Navigate to login
+            navigate('/login', { replace: true });
         },
         onError: (error) => {
             console.error(error);

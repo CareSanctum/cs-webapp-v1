@@ -51,7 +51,7 @@ const Profile = () => {
         status: userDetails?.patient?.current_location_status || "",
         expectedReturn: undefined
       },
-      consent_agreement: userDetails?.patient?.type_specific_metadata?.consent_agreement || false,
+      consent_agreement: userDetails?.patient?.type_specific_metadata?.consent || "",
     },
     contact: {
       phone: userDetails?.patient?.phone || "",

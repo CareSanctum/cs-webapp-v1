@@ -1,4 +1,4 @@
-**📄 CARE SANCTUM – CONSENT FORM FOR HYBRID RESPONDER MODEL**
+**CARE SANCTUM – CONSENT FOR HYBRID RESPONDER MODEL**
 
 Dear Resident,
 
@@ -6,7 +6,7 @@ As part of the Care Sanctum Hybrid Responder Model being implemented in your soc
 
 ---
 
-### **🔐 1\. PERSONAL AND WELLNESS INFORMATION**
+###  1\. PERSONAL AND WELLNESS INFORMATION
 
 By signing this consent form, you acknowledge and permit Care Sanctum to collect and store the following information:
 
@@ -23,7 +23,7 @@ This information will be accessed **only during emergencies** when you initiate 
 
 ---
 
-### **📡 2\. DEVICE INSTALLATION & OWNERSHIP**
+###  2\. DEVICE INSTALLATION & OWNERSHIP
 
 * All devices (including SOS buttons, motion sensors, fall detectors, smart watches, and any other devices, etc.) installed by Care Sanctum remain **the property of Care Sanctum**.
 
@@ -33,7 +33,7 @@ This information will be accessed **only during emergencies** when you initiate 
 
 ---
 
-### **🔍 3\. DATA USAGE & PRIVACY**
+### 3\. DATA USAGE & PRIVACY
 
 * Health data generated through these devices will be **used internally by Care Sanctum for research, model training, and improving emergency responsiveness**. However, no Personally identifiable information (PII)  will be used.
 
@@ -41,7 +41,7 @@ This information will be accessed **only during emergencies** when you initiate 
 
 ---
 
-### **🚫 4\. NON-INTRUSIVE TECHNOLOGY**
+### 4\. NON-INTRUSIVE TECHNOLOGY
 
 * None of the installed safety devices capture **audio or video recordings**.
 
@@ -51,7 +51,7 @@ This information will be accessed **only during emergencies** when you initiate 
 
 ---
 
-### **🚨 5\. EMERGENCY INTERVENTION PROTOCOL**
+### 5\. EMERGENCY INTERVENTION PROTOCOL
 
 In case of an SOS trigger **and** when:
 
@@ -75,7 +75,7 @@ This is done solely in the interest of resident safety and well-being.
 
 ---
 
-### **⚖️ 6\. LIABILITY CLAUSE**
+### 6\. LIABILITY CLAUSE
 
 * Care Sanctum and the Society will act in good faith, based on this consent, during emergencies.
 

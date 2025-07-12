@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Camera, Loader2 } from 'lucide-react';
+import { User, Camera, Loader2, Pencil} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback, AvatarWithCamera } from "@/components/ui/avatar";
 import { sendfileRequest } from '@/sendfileRequest';
@@ -19,7 +19,7 @@ interface PersonalInfoProps {
       status: "home" | "travelling";
       expectedReturn?: string;
     };
-    consent_agreement: boolean;
+    consent_agreement: string;
   };
 }
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -27,6 +27,7 @@ import { ConsentDialogContent } from '@/ConsentDialogContent';
 import { Button } from '@/components/ui/button';
 import { useUploadFile } from '@/hooks/uploadFile.hook';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router';
 
 export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
   const username = useAuthStore(state => state.username);
@@ -34,6 +35,7 @@ export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
   const [consentOpen, setConsentOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const {toast} = useToast();
+  const navigate = useNavigate();
   const fetchprofilePicture = async () => {
     try {
       const data = await viewRequest(username);  // Call the function
@@ -126,30 +128,15 @@ export const PersonalInfoCard = ({ personalInfo }: PersonalInfoProps) => {
           </div>
           <div>
             <p className="text-sm text-gray-500">Consent Agreement</p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <p className="font-medium whitespace-nowrap">
-                {personalInfo.consent_agreement ? "Agreed" : "Not Agreed"}
+                {personalInfo.consent_agreement === "COMPLETE" 
+                  ? "Complete Consent" 
+                  : personalInfo.consent_agreement === "PARTIAL"
+                    ? "Consent except break in"
+                    : "No consent given"}
               </p>
-
-              <Dialog open={consentOpen} onOpenChange={setConsentOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="inline-block w-48 self-center text-center px-4 py-2"
-                  >
-                    Consent Agreement
-                  </Button>
-                </DialogTrigger>
-                <DialogContent
-                  className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-2xl w-full max-h-screen flex flex-col bg-white rounded-lg p-3"
-                  style={{ maxWidth: "600px", maxHeight: "600px" }}
-                >
-                  <div className="flex-1 overflow-y-auto p-6">
-                    <ConsentDialogContent />
-                  </div>
-                </DialogContent>
-              </Dialog>
+                <Pencil size={18} color="green" strokeWidth={2} onClick={() => navigate("/consent")}/>
             </div>
           </div>
         </div>

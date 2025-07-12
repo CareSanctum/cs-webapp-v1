@@ -2,7 +2,7 @@ import axios from "axios";
 import { generateUrl } from "@/urls";
 import { useQuery } from "@tanstack/react-query";
 
-async function getAuthStatus() {
+export async function getAuthStatus() {
     try {
         const response = await axios.get(generateUrl('AUTH'));
         return response.data;
@@ -17,5 +17,6 @@ export function useAuthStatus() {
         queryKey: ['authStatus'],
         queryFn: getAuthStatus,
         retry: false,
+        
     });
 }
