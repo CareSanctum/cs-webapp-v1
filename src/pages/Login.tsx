@@ -23,7 +23,9 @@ const Login = () => {
     mutate({username, password}, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['authStatus'] });
-        navigate('/');
+        // Clear browser history and replace current entry to prevent back navigation to login
+        window.history.replaceState(null, '', '/');
+        navigate('/', { replace: true });
       },
       onError: (error) => {
         toast({

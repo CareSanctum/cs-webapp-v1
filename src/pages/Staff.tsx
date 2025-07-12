@@ -22,6 +22,9 @@ const Staff = () => {
   
   const { data: staffData, isLoading, error } = useStaffList();
   const staff = staffData?.staffs || [];
+  if (staffData){
+    console.log(staffData);
+  }
 
   const filteredStaff = staff.filter(member =>
     (member.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||

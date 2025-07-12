@@ -1,4 +1,4 @@
-import { X, Users, Archive, LogOut, Home, Shield, Building2, Loader2, Briefcase, ChevronRight } from "lucide-react";
+import { X, ListChecks, Archive, LogOut, Home, Shield, Building2, Loader2, Briefcase, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
@@ -8,6 +8,7 @@ import { useStaffList } from "@/hooks/staffList.hook";
 import { useAuthStore } from "@/store/AuthStore";
 import { viewRequest } from "@/viewRequest";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useConsentList } from "@/hooks/consent.hook";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -20,6 +21,7 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
   const username = useAuthStore(state => state.username);
   const {data: residentList, status: residentListstatus} = useResidentList();
   const {data: staffList, status: staffListStatus} = useStaffList();
+  const {data: consentList, status: consentListStatus} = useConsentList();
   const [fullName, setFullName] = useState('');
   const [profilepictureurl, setProfilePictureUrl] = useState('');
 
@@ -57,6 +59,10 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
     },
     ... ( staffListStatus === 'success' 
       ? [{ icon: Briefcase, label: "Staff", href: "/staff", description: "Directory" }]
+      : []
+    ),
+    ... ( consentListStatus === 'success' 
+      ? [{ icon: ListChecks, label: "Consent", href: "/consent-list", description: "Consent List" }]
       : []
     ),
     {

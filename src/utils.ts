@@ -13,20 +13,28 @@ function getCookie (name: string) {
     }
     return cookieValue
   }
-  export function getCSRFToken () {
-    return getCookie('csrftoken')
-  }
+export function getCSRFToken () {
+  return getCookie('csrftoken')
+}
 
-  export function getUtcDayBounds(date: Date) {
-    // clone so we don’t mutate the original
-    const startLocal = new Date(date)
-    startLocal.setHours(0, 0, 0, 0)
+export function getUtcDayBounds(date: Date) {
+  // clone so we don’t mutate the original
+  const startLocal = new Date(date)
+  startLocal.setHours(0, 0, 0, 0)
   
-    const endLocal = new Date(date)
-    endLocal.setHours(23, 59, 0, 0)
+  const endLocal = new Date(date)
+  endLocal.setHours(23, 59, 0, 0)
   
-    return {
-      startUtcIso: startLocal.toISOString(),
-      endUtcIso:   endLocal.toISOString(),
-    }
+  return {
+    startUtcIso: startLocal.toISOString(),
+    endUtcIso:   endLocal.toISOString(),
   }
+}
+
+export function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
